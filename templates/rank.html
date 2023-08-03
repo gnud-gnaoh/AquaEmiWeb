@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang = "eng">
+<html lang = "en">
     <head>
         <title>AquaEmi - Map</title>
         <meta name = "description" content = "[Description about AquaEmi]">
-        <link rel = "stylesheet" type = "text/css" href = "map.css">
+        <link rel = "stylesheet" type = "text/css" href = "rank.css">
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/b20eaf92de.js" crossorigin="anonymous"></script>
     </head>
@@ -30,10 +30,118 @@
             </nav>
         </section>
         <section>
+            <div class = "seperator"> </div>
+            <div class = "ranking_and_news">
+                <div class = "ranking_and_news_items"> <a href = "rank.html" style = "color: #00A66F; font-size: 2vw;" >Rankings</a> </div>
+                <div class = "ranking_and_news_items"> <a href = "news.html" style = "color: #000000; font-size: 2vw;">News</a> </div>
+            </div>
             <div class = "content" id = "content">
-                This is rank page
+                <div class="aqi-legend-container">
+                    <div class="aqi-legend-title"><span>Water quality and pollution ranking</span></div>
+                    <div class="aqi-legend-wrapper opened">
+                        <div class="aqi-legend bg-green">
+                            <p class="aqi-legend-range">0-50</p>
+                            <p class="aqi-legend-label">Tốt</p>
+                        </div>
+                        <!---->
+                        <div class="aqi-legend bg-yellow">
+                            <p class="aqi-legend-range">51-100</p>
+                            <p class="aqi-legend-label">Trung bình</p>
+                        </div>
+                        <!---->
+                        <div class="aqi-legend bg-orange">
+                            <p class="aqi-legend-range">101-150</p>
+                            <p class="aqi-legend-label">Không lành mạnh cho các nhóm nhạy cảm</p>
+                        </div>
+                        <!---->
+                        <div class="aqi-legend bg-red">
+                            <p class="aqi-legend-range">151-200</p>
+                            <p class="aqi-legend-label">Không lành mạnh</p>
+                        </div>
+                        <!---->
+                        <div class="aqi-legend bg-purple">
+                            <p class="aqi-legend-range">201-300</p>
+                            <p class="aqi-legend-label">Rất không lành mạnh</p>
+                        </div>
+                        <!---->
+                        <div class="aqi-legend bg-maroon">
+                            <p class="aqi-legend-range">301+</p>
+                            <p class="aqi-legend-label">Nguy hiểm</p>
+                        </div>
+                        <!---->
+                        <!---->
+                    </div>
+                </div>
+
+                <div class="ranking-city">
+                    <table class="ranklist">
+                        <tbody>
+                            <tr class="ng-star-inserted">
+                                <td> 1 </td>
+                                <td><img class="country-flag"
+                                        src="https://cdn.airvisual.net/flags/indonesia.jpg" alt="Jakarta, In-đô-nê-xi-a "></td>
+                                <td><a class="city-label"> Jakarta, In-đô-nê-xi-a </a></td>
+                                <td>
+                                    <div class="aqi-number bg-red"> 155 </div>
+                                </td>
+                                <td><span class="follower-number">
+                                        1.5M </span><span class="follower-suffix"> followers
+                                    </span></td>
+                            </tr>
+                            <tr class="ng-star-inserted">
+                                <td> 2 </td>
+                                <td><img class="country-flag"
+                                        src="https://cdn.airvisual.net/flags/china.jpg" alt="Bắc Kinh, Trung Hoa"></td>
+                                <td><a class="city-label"> Bắc Kinh, Trung Hoa </a></td>
+                                <td>
+                                    <div class="aqi-number bg-orange"> 141 </div>
+                                </td>
+                                <td><span class="follower-number">
+                                        3.8M </span><span class="follower-suffix"> followers
+                                    </span></td>
+                            </tr>
+                            <tr class="ng-star-inserted">
+                                <td> 3 </td>
+                                <td><img class="country-flag"
+                                        src="https://cdn.airvisual.net/flags/turkey.jpg" alt="Istanbul, Thổ Nhĩ Kỳ"></td>
+                                <td><a class="city-label"> Istanbul, Thổ Nhĩ Kỳ </a></td>
+                                <td>
+                                    <div class="aqi-number bg-orange text-black-60"> 122 </div>
+                                </td>
+                                <td><span class="follower-number">
+                                        176.1K </span><span class="follower-suffix"> followers
+                                    </span></td>
+                            </tr>
+                            <tr class="ng-star-inserted">
+                                <td> 4 </td>
+                                <td><img class="country-flag"
+                                        src="https://cdn.airvisual.net/flags/peru.jpg" alt="Lima, Pê-ru"></td>
+                                <td><a class="city-label"> Lima, Pê-ru </a></td>
+                                <td>
+                                    <div class="aqi-number bg-orange text-black-60"> 114 </div>
+                                </td>
+                                <td><span class="follower-number">
+                                        30.0K </span><span class="follower-suffix"> followers
+                                    </span></td>
+                            </tr>
+                            <tr class="ng-star-inserted">
+                                <td> 5 </td>
+                                <td><img class="country-flag"
+                                        src="https://cdn.airvisual.net/flags/pakistan.jpg" alt="Karachi, Pa-ki-xtan "></td>
+                                <td><a class="city-label"> Karachi, Pa-ki-xtan </a></td>
+                                <td>
+                                    <div class="aqi-number bg-orange text-black-60"> 112 </div>
+                                </td>
+                                <td><span class="follower-number">
+                                        45.9K </span><span class="follower-suffix"> followers
+                                    </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
+
         <footer>
             <div class = "footer" id = "footer">
                 <img src="imgs/logo.png" alt="AquaEmi's logo" style = "width: 20vw; height: 6.8; margin-top: 1vw">
