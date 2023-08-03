@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from marshmallow import fields, post_load
+from math import cos, asin, sqrt, pi
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:bubudeptrai2006@localhost:3306/bucketlist'
@@ -136,7 +137,7 @@ class WaterMeasurementSchema(SQLAlchemySchema):
         sqla_session = db.session
     
     id = fields.Number(dump_only=True)
-    WaterSourceid = fields.Number(dump_only=True)
+    WaterSourceid = fields.Number(required=True)
     ph = fields.Float(required=True)
     turbidity = fields.Float(required=True)
     conductivity = fields.Float(required=True)
@@ -196,6 +197,114 @@ def water_measurement_update_by_id(id):
 @app.route('/measure/<id>', methods=['DELETE'])
 def water_measurement_delete_by_id(id):
     get_water_measurement = WaterMeasurement.query.get(id)
+    db.session.delete(get_water_measurement)
+    db.session.commit()
+    return make_response("", 204)
+
+
+# WaterMeasurementApp
+def distance(lat1, lon1, lat2, lon2):
+    r = 6371 # km
+    p = pi / 180
+
+    a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((lon2-lon1)*p))/2
+    return 2 * r * asin(sqrt(a))
+
+class WaterMeasurementApp(db.Model):
+    __tablename__ = 'WaterMeasurementApps'
+    id = db.Column(db.Integer, primary_key=True)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    WaterSourceid = db.Column(db.Integer, db.ForeignKey("WaterSources.id"))
+    turbidity = db.Column(db.Float)
+    color = db.Column(db.String(20))
+    datetime = db.Column(db.DateTime)
+
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def __init__(self, latitude, longitude, turbidity, color):
+        self.latitude = latitude
+        self.longitude = longitude
+        watersources = WaterSource.query.all()
+
+        closest_watersource = watersources[0]
+        for watersource in watersources:
+            if distance(latitude, longitude, closest_watersource.latitude, closest_watersource.longitude) \
+            > distance(latitude, longitude, watersource.latitude, watersource.longitude):
+                closest_watersource = watersource
+        
+        self.WaterSourceid = closest_watersource.id
+        self.turbidity = turbidity
+        self.color = color
+        self.datetime = datetime.datetime.utcnow()
+
+    def __repr__(self):
+        return "<WaterMeasurementApp(datetime={self.datetime!r})>".format(self=self)
+
+class WaterMeasurementAppSchema(SQLAlchemySchema):
+    class Meta(SQLAlchemySchema.Meta):
+        model = WaterMeasurementApp
+        sqla_session = db.session
+    
+    id = fields.Number(dump_only=True)
+    latitude = fields.Float(required=True)
+    longitude = fields.Float(required=True)
+    WaterSourceid = fields.Number(dump_only=True)
+    turbidity = fields.Float(required=True)
+    color = fields.String(required=True)
+    datetime = fields.DateTime(dump_only=True)
+
+    @post_load
+    def make_water_measurement_app(self, data, **kwargs):
+        return WaterMeasurementApp(**data)
+
+# water measurement app api
+@app.route('/measureapp', methods=['GET'])
+def water_measurement_app_index():
+    get_water_measurements = WaterMeasurementApp.query.all()
+    water_measurement_schema = WaterMeasurementAppSchema(many=True)
+    water_measurements = water_measurement_schema.dump(get_water_measurements)
+    return make_response(jsonify({"water_measurements_app": water_measurements}))
+
+@app.route('/measureapp/<id>', methods=['GET'])
+def water_measurement_app_get_by_id(id):
+    get_water_measurement = WaterMeasurementApp.query.get(id)
+    water_measurement_schema = WaterMeasurementAppSchema()
+    water_measurement = water_measurement_schema.dump(get_water_measurement)
+    return make_response(jsonify({"water_measurement_app": water_measurement}))
+
+@app.route('/measureapp', methods=['POST'])
+def water_measurement_app_create():
+    data = request.get_json()
+    water_measurement_schema = WaterMeasurementAppSchema()
+    water_measurement = water_measurement_schema.load(data)
+    result = water_measurement_schema.dump(water_measurement.create())
+    return make_response(jsonify({"water_measurement_app": result}), 200)
+
+@app.route('/measureapp/<id>', methods=['PUT'])
+def water_measurement_app_update_by_id(id):
+    data = request.get_json()
+    get_water_measurement = WaterMeasurementApp.query.get(id)
+    if data.get('latitude'):
+        get_water_measurement.latitude = data['latitude']
+    if data.get('longitude'):
+        get_water_measurement.longitude = data['longitude']
+    if data.get('turbidity'):
+        get_water_measurement.turbidity = data['turbidity']
+    if data.get('color'):
+        get_water_measurement.color = data['color']
+    db.session.add(get_water_measurement)
+    db.session.commit()
+    water_measurement_schema = WaterMeasurementAppSchema(only=['id', 'latitude', 'longitude', 'WaterSourceid', 'turbidity', 'color', 'datetime'])
+    water_measurement = water_measurement_schema.dump(get_water_measurement)
+    return make_response(jsonify({"water_measurement_app": water_measurement}))
+
+@app.route('/measureapp/<id>', methods=['DELETE'])
+def water_measurement_app_delete_by_id(id):
+    get_water_measurement = WaterMeasurementApp.query.get(id)
     db.session.delete(get_water_measurement)
     db.session.commit()
     return make_response("", 204)
