@@ -313,8 +313,9 @@ def water_measurement_app_delete_by_id(id):
 with app.app_context():
     db.create_all()
 
-# Views
+# Viewsurn render_template('index.html')
 @app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def home_page():
     return render_template('index.html')
 
@@ -331,11 +332,15 @@ def rank_page():
     return render_template('rankings.html')
 
 @app.route('/news', methods=['GET'])
-def rank_page():
+def new_page():
     return render_template('news.html')
 
-@app.route('/about', methods=['GET'])
-def about_page():
+@app.route('/travel', methods=['GET'])
+def travel_page():
+    return render_template('travel.html')
+
+@app.route('/info', methods=['GET'])
+def info_page():
     return render_template('info.html')
 
 if __name__ == '__main__':
