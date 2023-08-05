@@ -333,7 +333,26 @@ def map_page():
 
 @app.route('/map_earth', methods=['GET'])
 def earth_page():
-    return render_template('map_earth.html')
+    watermeasurements = WaterMeasurement.query.all()
+    
+    features = []
+    for measure in watermeasurements:
+        watersource = WaterSource.query.get(measure.WaterSourceid)
+        features.append({
+            "type": "Feature",
+            "properties": {"mag": abs(measure.ph - 7) * 100},
+            "geometry": {
+                "type": "Point",
+                "coordinates": [watersource.longitude, watersource.latitude]
+            }
+        })
+
+    data = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+    print(json.dumps(data))
+    return render_template('map_earth.html', data=json.dumps(data))
 
 @app.route('/rankings', methods=['GET'])
 def rank_page():

@@ -6,14 +6,7 @@
         <link rel = "stylesheet" type = "text/css" href = "../static/map_earth.css">
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/b20eaf92de.js" crossorigin="anonymous"></script>
-        
-        <!-- Leaflet -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-        <!-- Leaflet heatmap plugin: https://github.com/Leaflet/Leaflet.heat -->
-        <script src="leaflet-heat.js"></script>
-
+    
         <!-- mapbox -->
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
@@ -45,150 +38,10 @@
             <div class = "content" id = "content">
                 <!-- pk.eyJ1IjoiaW5jdCIsImEiOiJjbGtydG1rcGwweW9xM2hudHNubjJyM2lmIn0.HkbRZ7BIWySya__ZCaKMOQ -->
                 <div id = "map" style="width: 100%; height: 45vw"></div>
+                <script type="text/javascript" src="../static/mapbox.js"></script>
                 <script>
-                    mapboxgl.accessToken = 'pk.eyJ1IjoiZ251ZGduYW9oIiwiYSI6ImNsa3IxYnNxeTByMzAzZmw5b295bzMybXAifQ.O8QTFy-nv-5mMeVXVD51qA';
-                    const map = new mapboxgl.Map({
-                        container: 'map',
-                        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-                        style: 'mapbox://styles/mapbox/satellite-streets-v12',
-                        center: [-130, 50],
-                        zoom: 2.5
-                    });
-                
-                    map.on('load', () => {
-                        // Add a geojson point source.
-                        // Heatmap layers also work with a vector tile source.
-                        map.addSource('earthquakes', {
-                            'type': 'geojson',
-                            'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-                        });
-                
-                        map.addLayer(
-                            {
-                                'id': 'earthquakes-heat',
-                                'type': 'heatmap',
-                                'source': 'earthquakes',
-                                'maxzoom': 9,
-                                'paint': {
-                                    // Increase the heatmap weight based on frequency and property magnitude
-                                    'heatmap-weight': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['get', 'mag'],
-                                        0,
-                                        0,
-                                        6,
-                                        1
-                                    ],
-                                    // Increase the heatmap color weight weight by zoom level
-                                    // heatmap-intensity is a multiplier on top of heatmap-weight
-                                    'heatmap-intensity': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['zoom'],
-                                        0,
-                                        1,
-                                        9,
-                                        3
-                                    ],
-                                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-                                    // Begin color ramp at 0-stop with a 0-transparancy color
-                                    // to create a blur-like effect.
-                                    'heatmap-color': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['heatmap-density'],
-                                        0,
-                                        'rgba(33,102,172,0)',
-                                        0.2,
-                                        'rgb(103,169,207)',
-                                        0.4,
-                                        'rgb(209,229,240)',
-                                        0.6,
-                                        'rgb(253,219,199)',
-                                        0.8,
-                                        'rgb(239,138,98)',
-                                        1,
-                                        'rgb(178,24,43)'
-                                    ],
-                                    // Adjust the heatmap radius by zoom level
-                                    'heatmap-radius': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['zoom'],
-                                        0,
-                                        2,
-                                        9,
-                                        20
-                                    ],
-                                    // Transition from heatmap to circle layer by zoom level
-                                    'heatmap-opacity': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['zoom'],
-                                        7,
-                                        1,
-                                        9,
-                                        0
-                                    ]
-                                }
-                            },
-                            'waterway-label'
-                        );
-                
-                        map.addLayer(
-                            {
-                                'id': 'earthquakes-point',
-                                'type': 'circle',
-                                'source': 'earthquakes',
-                                'minzoom': 7,
-                                'paint': {
-                                    // Size circle radius by earthquake magnitude and zoom level
-                                    'circle-radius': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['zoom'],
-                                        7,
-                                        ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
-                                        16,
-                                        ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
-                                    ],
-                                    // Color circle by earthquake magnitude
-                                    'circle-color': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['get', 'mag'],
-                                        1,
-                                        'rgba(33,102,172,0)',
-                                        2,
-                                        'rgb(103,169,207)',
-                                        3,
-                                        'rgb(209,229,240)',
-                                        4,
-                                        'rgb(253,219,199)',
-                                        5,
-                                        'rgb(239,138,98)',
-                                        6,
-                                        'rgb(178,24,43)'
-                                    ],
-                                    'circle-stroke-color': 'white',
-                                    'circle-stroke-width': 1,
-                                    // Transition from heatmap to circle layer by zoom level
-                                    'circle-opacity': [
-                                        'interpolate',
-                                        ['linear'],
-                                        ['zoom'],
-                                        7,
-                                        0,
-                                        8,
-                                        1
-                                    ]
-                                }
-                            },
-                            'waterway-label'
-                        );
-                    });
-            </script>
+                    init_mapbox({{data | safe}});
+                </script>
             <div class = "normal_map" id = "normal_map">
                 <span class = "remove_ranking" id = "remove_ranking"><i class="fa-solid fa-x fa-2xs" style="color: #ffffff;"></i></span>
                 <div class = "rankings" id = "rankings">
@@ -199,9 +52,6 @@
                 <img src="../static/images/map.png" alt="AquaEmi's logo" style = "width: 10vw; height: 5vw; border-radius: 0.3vw;cursor: pointer;" onclick = "location.href='map';">
             </div>
             </div>
-            
-
-            
         </section>
 
         <footer>
