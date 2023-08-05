@@ -313,7 +313,7 @@ def water_measurement_app_delete_by_id(id):
 with app.app_context():
     db.create_all()
 
-# Viewsurn render_template('index.html')
+# Views
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
