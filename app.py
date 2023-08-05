@@ -324,11 +324,15 @@ def map_page():
 
 @app.route('/earth', methods=['GET'])
 def earth_page():
-    return render_template('earth.html')
+    return render_template('map_earth.html')
 
 @app.route('/rank', methods=['GET'])
 def rank_page():
-    return render_template('rank.html')
+    return render_template('rankings.html')
+
+@app.route('/news', methods=['GET'])
+def rank_page():
+    return render_template('news.html')
 
 @app.route('/about', methods=['GET'])
 def about_page():

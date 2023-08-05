@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;600&display=swap');
+body {
+    background-color: #ffffff;
+    margin: 0;
+    font-family: 'Comic Neue', cursive;
+}
+.navigation {
+    padding: 0.5vw;
+    display: flex;
+    background-color: #fff;
+    border-bottom: 0.2vw solid #00C986;
+    box-shadow: rgba(86, 156, 114, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.navigation_bar {
+    padding: 0.1vw;
+    display: flex;
+}
+.navigation_keys {
+    margin: 2.5vw;
+    display: flex;
+    position: absolute;
+    right: 0;
+}
+.navigation_keys .subjects {
+    display: flex;
+    margin: -2.3vw 15vw;
+}
+.navigation_keys .subjects p {
+    font-size: 1.3vw;
+    font-weight: bold;
+    padding: 0 2vw;
+}
+.navigation_keys .tools {
+    margin: -1.5vw -1.5vw 0.5vw 2vw;
+}
+.navigation_keys .tools a {
+    margin-left: 1vw;
+}
+.content {
+    font-family: 'Noto Sans', sans-serif;
+    padding: 0 4vw 1vw 4vw;
+    box-shadow: rgba(86, 156, 114, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.article {
+    display: flex;
+}
+.article .article_content {
+    margin-right: 4vw;
+    width: 70%;
+}
+.article .article_content .share_article {
+    margin-top: -0.7vw;
+}    
+.article .others {
+    margin-left: -2vw;
+    width: 30%;
+    margin-top: 2vw;
+}
+.article .others .related_article {
+    border: 0.1vw solid #dbdbdb;
+    display: flex;
+    padding-bottom: -1vw;
+    margin-bottom: 1vw;
+}
+.article .others a {
+    color: #00704b;
+    text-decoration: none;
+}
+.article .others .name:hover {
+    color: #00462e;
+    transition: 0.2s;
+}
+.article .others .related_article .related_article_content {
+    margin-top: -1.2vw;
+    padding: 0.8vw 0 0 1vw;
+}
+.footer {
+    display: flex;
+    padding: 1vw 8vw;
+    border-top: 0.2vw solid #00C986;
+}
+.subjects_footer {
+    padding-top: 1vw;
+    display: flex;
+}
+.subjects_footer .first {
+    padding: 0.1vw 4vw ;
+    font-size: 1.2vw;
+}
+.footer .second {
+    padding: 0.1vw 4vw ;
+    font-size: 1.2vw;
+}
+.footer .third {
+    padding: 0.1vw 4vw ;
+    font-size: 1.2vw;
+}
+.mailing_list {
+    margin-left: 3vw;
+}
+.mailing_list .email_mailing {
+    margin: -3vw 0 0 -1vw;
+    width: 15vw;
+    height: 1vw;
+    font-size: medium;
+    border: none;
+    padding: 0.5vw;
+    border-bottom: 0.15vw solid #000;
+}
+.mailing_list .social_media {
+    margin-top: 1vw;
+}

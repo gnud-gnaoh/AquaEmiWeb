@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>AquaEmi - Map</title>
+        <meta name = "description" content = "[Description about AquaEmi]">
+        <link rel = "stylesheet" type = "text/css" href = "../static/map.css">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/b20eaf92de.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        
+        <!-- Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+        <!-- Leaflet heatmap plugin: https://github.com/Leaflet/Leaflet.heat -->
+        <script src="leaflet-heat.js"></script>
+    </head>
+    <body>
+        <section class = "navigation" id = "navigation">
+            <nav>
+                <div class = "navigation_bar" id = "navigation_bar">
+                    <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 12.5vw; height: 4.5vw;">
+                    <div class = "navigation_keys" id = "navigation_keys">
+                        <div class = "subjects" id = "subjects">
+                            <p><a href = "index.html" title = "My water" style = "text-decoration: none; color: #00A66F;">My water</a></p>
+                            <p><a href = "map.html" title = "Map" style = "text-decoration: none; color: #00A66F;">Map</a></p>
+                            <p><a href = "travel.html" title = "Travel" style = "text-decoration: none; color: #00A66F;">Travel</a></p>
+                            <p><a href = "news.html" title = "News & Rankings" style = "text-decoration: none; color: #00A66F;">News & Rankings</a></p>
+                            <p><a href = "info.html" title = "Info" style = "text-decoration: none; color: #00A66F;">Info</a></p>
+                        </div>
+                        <div class = "tools" id = "tools">
+                            <a href = "index.html"><img src = "../static/images/search.png" alt="AquaEmi's search icon" style = "width: 2vw"></a>
+                            <a href = "index.html"><img src = "../static/images/notifications.PNG" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
+                            <a href = "index.html"><img src = "../static/images/profile.PNG" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </section>
+
+        <section>
+            <div class = "content" id = "content">
+                <div id = "map" style="width: 100%; height: 45vw"></div>
+                <script>
+                    var map = L.map('map', {
+                        center: [51.505, -0.09],
+                        zoom: 12
+                    });
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+                    var heat = L.heatLayer([
+                        [-6, -81, 0.6],
+                        [12, 38, 0.8],
+                        [23, 78, 0.3],
+                    ], {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+                </script>
+                <div class = "earth_map" id = "earth_map">
+                    <span class = "remove_ranking" id = "remove_ranking"><i class="fa-solid fa-x fa-2xs" style="color: #ffffff;"></i></span>
+                    <div class = "rankings" id = "rankings">
+                        <p style = "font-size: 2.2vw; ">World WQI Ranking</p>
+                        <p style = "font-size: 0.8vw; margin-top: -2vw">[Last updated]</p>
+                        <button class = "full_ranking" id = "full_ranking">SEE FULL RANKING</button>
+                    </div>
+                    <img src="../static/images/earth.jpg" alt="AquaEmi's logo" style = "width: 8.5vw; height: 6.4vw; cursor: pointer;" onclick = "location.href='map_earth.html';">
+                </div>
+                
+            </div>
+        </section>
+
+        <footer>
+            <div class = "footer" id = "footer">
+                <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 19vw; height: 6.5vw; margin-top: 1.3vw">
+                <div class = "subjects_footer" id = "subjects_footer">
+                    <div class = "first" id = "first">
+                        <p>Intro</p>
+                        <p>My water</p>
+                    </div>
+                    <div class = "second" id = "second">
+                        <p>Map</p>
+                        <p>Travel</p>
+                    </div>
+                    <div class = "third" id = "third">
+                        <p>News and Rankings</p>
+                        <p>Profile and notifications</p>
+                    </div>
+                </div>
+                <div class = "mailing_list" id = "mailing_list">
+                    <p style = "font-size: 1.2vw; font-weight: bold; color: #008A5C">JOIN OUR MAILING LIST!</p>
+                    <input type = "email" class = "email_mailing" id = "email" name = "email" placeholder="Email address">
+                    <i class="fa-solid fa-arrow-right fa-sm" style="color: #008a5c;"></i><br>
+                    <div class = "social_media" id = "social_media">
+                        <i class="fa-brands fa-square-instagram fa-sm" style="color: #01a26d; margin: 0 0.1vw"></i>
+                        <i class="fa-brands fa-pinterest fa-sm" style="color: #01a26d; margin: 0 0.1vw"></i>
+                        <i class="fa-brands fa-twitter fa-sm" style="color: #01a26d; margin: 0 0.1vw"></i>
+                        <i class="fa-brands fa-facebook fa-sm" style="color: #01a26d; margin: 0 0.1vw"></i>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
