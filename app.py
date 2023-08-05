@@ -1,4 +1,5 @@
 import datetime
+import json
 from flask import Flask, request, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
@@ -321,13 +322,20 @@ def home_page():
 
 @app.route('/map', methods=['GET'])
 def map_page():
-    return render_template('map.html')
+    watermeasurements = WaterMeasurement.query.all()
+    
+    data = []
+    for measure in watermeasurements:
+        watersource = WaterSource.query.get(measure.WaterSourceid)
+        data.append([watersource.longitude, watersource.latitude, abs(measure.ph - 7)])
 
-@app.route('/earth', methods=['GET'])
+    return render_template('map.html', data=json.dumps(data))
+
+@app.route('/map_earth', methods=['GET'])
 def earth_page():
     return render_template('map_earth.html')
 
-@app.route('/rank', methods=['GET'])
+@app.route('/rankings', methods=['GET'])
 def rank_page():
     return render_template('rankings.html')
 
