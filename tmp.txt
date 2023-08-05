@@ -1,0 +1,9 @@
+cmd.exe /C curl http://localhost:5000/measure \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{ "WaterSourceid": "2", "conductivity": 24.2, "flow": 52.5, "ph": 21.2, "temperature": 45.5, "turbidity": 3.36 }'
+
+cmd.exe /C curl http://localhost:5000/measureapp \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{ "latitude": 69.23, "longitude": 96.3, "color": "#cccccc", "turbidity": 0.36 }'
