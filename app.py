@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from marshmallow import fields, post_load
 from models import db, WaterSource, WaterSourceSchema, WaterMeasurement, WaterMeasurementSchema, WaterMeasurementApp, WaterMeasurementAppSchema
+import pycountry
+import random
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
@@ -174,7 +176,26 @@ def home_page():
         watersource = WaterSource.query.get(measure.WaterSourceid)
         data.append([watersource.longitude, watersource.latitude, abs(measure.ph - 7)])
 
-    return render_template('index.html', data=json.dumps(data))
+    watersources = WaterSource.query.all()
+    countries_data = []
+    for watersource in watersources:
+        if len(watersource.measurements) == 0:
+            continue
+        id = watersource.id
+        country = watersource.country
+        name = pycountry.countries.get(alpha_2=country).name
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        followers = random.randrange(0, 1000) # to be implemented
+        countries_data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
+
+    countries_data.sort(key=lambda d: d['quality'])
+    countries_data = countries_data[:10] # take top 10
+
+    # renumber id
+    for id, val in enumerate(countries_data):
+        val['id'] = id + 1
+
+    return render_template('index.html', data=json.dumps(data), countries_data=countries_data)
 
 @app.route('/map', methods=['GET'])
 def map_page():
@@ -212,7 +233,25 @@ def earth_page():
 
 @app.route('/rankings', methods=['GET'])
 def rank_page():
-    return render_template('rankings.html')
+    watersources = WaterSource.query.all()
+    data = []
+    for watersource in watersources:
+        if len(watersource.measurements) == 0:
+            continue
+        id = watersource.id
+        country = watersource.country
+        name = pycountry.countries.get(alpha_2=country).name
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        followers = random.randrange(0, 1000) # to be implemented
+        data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
+
+    data.sort(key=lambda d: d['quality'])
+
+    # renumber id
+    for id, val in enumerate(data):
+        val['id'] = id + 1
+    
+    return render_template('rankings.html', data=data)
 
 @app.route('/news', methods=['GET'])
 def new_page():

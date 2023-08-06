@@ -334,66 +334,15 @@
                                 <p style = "margin-right: 16vw;">MAJOR CITY</p>
                                 <p>WQI</p>
                             </div>
-                            <div class = "ranking_tops" id = "ranking_top1">
-                                <p style = "margin-right: 2.1vw;">1</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top2">
-                                <p style = "margin-right: 2.1vw;">2</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top3">
-                                <p style = "margin-right: 2.1vw;">3</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top4">
-                                <p style = "margin-right: 2.1vw;">4</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top5">
-                                <p style = "margin-right: 2.1vw;">5</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top6">
-                                <p style = "margin-right: 2.1vw;">6</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top7">
-                                <p style = "margin-right: 2.1vw;">7</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top8">
-                                <p style = "margin-right: 2.1vw;">8</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top9">
-                                <p style = "margin-right: 2.1vw;">9</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
-                            <div class = "ranking_tops" id = "ranking_top10">
-                                <p style = "margin-right: 2.1vw; margin-left: -0.5vw">10</p>
-                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
-                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
-                                <div class = "wqi_rank" id = "wqi_rank">33</div>
-                            </div>
+                            
+                            {% for country in countries_data %}
+                                <div class = "ranking_tops" id = "ranking_top{{ country.id }}">
+                                    <p style = "margin-right: 2.1vw;"> {{ country.id }} </p>
+                                    <img src = "https://flagsapi.com/{{ country.country }}/flat/64.png" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                    <p style = "margin-right: 11vw;"><a class = "details"> {{ country.name }} </a></p>
+                                    <div class = "wqi_rank"> {{ country.quality }} </div>
+                                </div>
+                            {% endfor %}
                         </div>
                         <p style = "font-size: 0.7vw; color: #505050; margin-left: 12vw; margin-top: 2vw;">9:00, August 4</p>
                         <button class = "full_ranking" id = "full_ranking">SEE FULL RANKING</button>

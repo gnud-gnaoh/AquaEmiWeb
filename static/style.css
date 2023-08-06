@@ -280,6 +280,8 @@ body {
     font-weight: bold;
     padding: 0 1vw;
     height: 1.6vw;
+    margin-left: auto; 
+    margin-right: 0;
 }
 .ranking .full_ranking {
     margin: 2vw 0 0 2.5vw;

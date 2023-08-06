@@ -60,18 +60,26 @@
                     </div>
                 </div>
                 <div class = "rankings_content" id = "rankings_content">
-                    <div class = "ranks" id = "ranks">
-                        <div class = "number" id = "number">1</div>
-                        <div class = "name" id = "name">
-                            <img src = "../static/images/thailand_flag.PNG" style = "width: 2vw; height: 1.4vw;">
-                            <p style = "margin-left: 1vw; margin-top: 0vw"><a href = "" class = "location">Chiang Mai, Thailand</a></p>
+                    {% for country in data %}
+                        <div class = "ranks" id = "ranks">
+                            <div class = "number" id = "number"> {{ country.id }}</div>
+                            <div class = "name" id = "name">
+                                <img src = "https://flagsapi.com/{{ country.country }}/flat/64.png" style = "width: 2vw; height: 1.4vw;">
+                                <p style = "margin-left: 1vw; margin-top: 0vw"><a href = "" class = "location"> {{ country.name }} </a></p>
+                            </div>
+                            <div class = "quality" id = "quality">
+                                {% if country.quality <= 100 %}
+                                <div class = "quality_box" id = "quality_box"> {{ country.quality }} </div>
+                                {% elif country.quality <= 200 %}
+                                <div class = "quality_box" id = "quality_box" style="background-color: #fcb07e"> {{ country.quality }} </div>
+                                {% else %}
+                                <div class = "quality_box" id = "quality_box" style="background-color: #ffa2a2"> {{ country.quality }} </div>
+                                {% endif %}
+                            </div>
+                            <div class = "followers"> {{ country.followers }}</div>
+                            <div class = "heart"><img src = "../static/images/heart.PNG" style = "width: 1.2vw; height: 1vw"></div>
                         </div>
-                        <div class = "quality" id = "quality">
-                            <div class = "quality_box" id = "quality_box">4</div>
-                        </div>
-                        <div class = "followers">11.1M</div>
-                        <div class = "heart"><img src = "../static/images/heart.PNG" style = "width: 1.2vw; height: 1vw"></div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
