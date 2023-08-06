@@ -7,6 +7,13 @@
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/b20eaf92de.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+        <!-- Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+        <!-- Leaflet heatmap plugin: https://github.com/Leaflet/Leaflet.heat -->
+        <script src="../static/leaflet-heat.js"></script>
     </head>
     <body>
         <section class = "navigation" id = "navigation">
@@ -31,8 +38,401 @@
             </nav>
         </section>
         <section>
-            <div class = "content" id = "content">
-                Helu-
+            <div id = "map" style="width: 100%; height: 35vw"></div>
+            <script>
+                var map = L.map('map', {
+                    center: [51.505, -0.09],
+                    zoom: 5
+                });
+                    
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+
+                var heat = L.heatLayer([
+                    [-6, -81, 0.6],
+                    [12, 38, 0.8],
+                    [23, 78, 0.3],
+                ], {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+            </script>
+            <div class = "quality" id = "quality">
+                <div class = "location" id = "location">
+                    <p style = "font-size: 3vw; font-weight: bolder; margin-top: 1.2vw;">Sai Gon River</p>
+                    <p style = "font-size: 1vw; font-weight: light; margin-top: -2.5vw;">Ho Chi Minh city, Vietnam</p>
+                </div>
+                <div class = "quality_box_content" id = "quality_box_content">
+                    <div class = "quality_box" id = "quality_box">
+                        <div class = "image_quality" id = "image_quality">
+                            <img src = "../static/images/alarm.png" style = "width: 6vw; height: 6vw;">
+                        </div>
+                        <div class = "quality_content" id = "quality_content">
+                            <div class = "quality_wqi" id = "quality_wqi">
+                                <div class = "wqi" id = "wqi">
+                                    <p style = "font-size: 2.5vw; margin-top: 2.7vw">125*</p>
+                                    <p style = "margin-top: -2.5vw; font-size: 0.9vw; margin-left: -0.8vw">WQI</p>
+                                </div>
+                                <div class = "water_quality" id = "water_quality">
+                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">ALARM</p>
+                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for fish and human</p>
+                                </div>
+                            </div>
+                            <div class = "others" id = "others">
+                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "weather" id = "weather">
+                        <div class = "temperature" id = "temperature">
+                            <img src = "../static/images/temperature.PNG" style = "width: 2vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E">35</p> 
+                        </div>
+                        <div class = "wind" id = "wind">
+                            <img src = "../static/images/wind.PNG" style = "width: 1.8vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E">14.8 km/h</p> 
+                        </div>
+                        <div class = "wet" id = "wet">
+                            <img src = "../static/images/wet.PNG" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E">38%</p> 
+                        </div>
+                    </div>
+                </div>
+                <p style = "font-size: 0.8vw;">Last updated 16:28</p>
+                <div class = "data_provided" id = "data_provided">
+                    <div class = "logo" id = "logo">
+                        <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 6vw; height: 2vw;">
+                    </div>
+                    <div class = "text" id = "text">
+                        <p style = "font-size: 0.8vw">Data provided by</p>
+                        <p style = "font-size: 0.8vw; font-weight: bold; margin-top: -0.5vw;">WQI modeled using satellite data</p>
+                    </div>
+                    <div class = "more" id = "more">
+                        <img src="../static/images/more.PNG" alt="More information" style = "width: 1vw; height: 1.2vw;">
+                    </div>
+                </div>
+            </div>
+            <div class = "earth_map" id = "earth_map">
+                <img src = "../static/images/earth.jpg" alt="AquaEmi's logo" style = "width: 8.5vw; height: 6.4vw; cursor: pointer;" onclick = "location.href='map_earth';">
+            </div>
+            <div class = "influential" id = "influential">
+                <img src = "../static/images/total.png" style = "border-radius: 0.3vw; width: 9vw; height: 6.4vw;">
+            </div>
+        </section>
+        <section>
+            <div class = "content">
+                <div class = "forecast" id = "forecast">
+                    <p style = "color: #00A66E; font-weight: bold;">Forecast in Sai Gon river, Ho Chi Minh city</p>
+                    <div class = "forecast_screen" id = "forecast-screen">
+                        <div class = "forecast_box" id = "forecast_box_2days_ago">
+                            <div class = "date" id = "date">Friday</div>
+                            <div class = "time_frames" id = "time_frames">
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "forecast_box" id = "forecast_box_2days_ago">
+                            <div class = "date" id = "date">Saturday</div>
+                            <div class = "time_frames" id = "time_frames">
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "forecast_box" id = "forecast_box_2days_ago">
+                            <div class = "date" id = "date" style = "color: #00b87a; border-bottom: 0.25vw solid #2CD19B;">Sunday</div>
+                            <div class = "time_frames" id = "time_frames">
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw; ">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "forecast_box" id = "forecast_box_2days_ago">
+                            <div class = "date" id = "date">Monday</div>
+                            <div class = "time_frames" id = "time_frames">
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "forecast_box" id = "forecast_box_2days_ago">
+                            <div class = "date" id = "date">Tuesday</div>
+                            <div class = "time_frames" id = "time_frames">
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                                <div class = "time_frame_box" id = "time_frame_box">
+                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
+                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <img src = "../static/images/temperature2.PNG" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <img src = "../static/images/wind2.PNG" style = "width: 3vw; height: 3vw;">
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class = "week_forecast">7 DAY FORECAST</button><br>
+                    <i class="fa-solid fa-angle-up fa-lg" style = "color: #00A66F; margin: 1.5vw 0 0 47vw;"></i>
+                </div>
+                <div class = "other_places" id = "other_places">
+                    <div class = "settings">
+                        <div class = "add_place_manage" id = "add_place" style = "margin-left: 31.5vw;">Add Place</div>
+                        <div class = "add_place_manage" id = "manage">Manage</div>
+                    </div>
+                    <div class = "other_places_" id = "other_places_">
+                        <div class = "other_places_box" id = "other_places_box" style = "margin-right: 4vw;">
+                            <div class = "other_places_image" id = "other_places_image">
+                                <div class = "other_places_temperature" id = "other_places_temperature">
+                                    <img src = "../static/images/temperature3.png" style = "width: 3.5vw; height: 3vw;">
+                                    <p style = "font-size: 1.7vw; color: #fff; margin: 0.5vw 0 0 9.5vw;">23</p>
+                                </div>
+                                <p style = "color: #730000; font-weight: bold; font-size: 2vw; margin-top: 1.5vw">MODERATE</p>
+                                <img src = "../static/images/moderate.png" style = "width: 11.5vw; height: 12vw; margin-top: -1vw">
+                                <p style = "color: #730000; font-size: 2.5vw; margin: 0">51</p>
+                            </div>
+                            <div class = "other_places_info" id = "other_places_info">
+                                <p style = "font-size: 1.8vw; font-weight: bold;">Mekong River</p>
+                                <p style = "font-size: 1.2vw; margin-top: -1.5vw">Thailand</p>
+                                <div class = "other_places_forecast" id = "other_places_forecast">
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Sat.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Sun.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Mon.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "more_info" id = "more_info">
+                                    <p style = "font-weight: bold; font-size: 1vw;">18:00 (local time)</p>
+                                    <i class="fa-solid fa-angle-up fa-xs" style = "transform: rotate(180deg)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "other_places_box" id = "other_places_box">
+                            <div class = "other_places_image" id = "other_places_image">
+                                <div class = "other_places_temperature" id = "other_places_temperature">
+                                    <img src = "../static/images/temperature3.png" style = "width: 3.5vw; height: 3vw;">
+                                    <p style = "font-size: 1.7vw; color: #fff; margin: 0.5vw 0 0 9.5vw;">23</p>
+                                </div>
+                                <p style = "color: #730000; font-weight: bold; font-size: 2vw; margin-top: 1.5vw">MODERATE</p>
+                                <img src = "../static/images/moderate.png" style = "width: 11.5vw; height: 12vw; margin-top: -1vw">
+                                <p style = "color: #730000; font-size: 2.5vw; margin: 0">51</p>
+                            </div>
+                            <div class = "other_places_info" id = "other_places_info">
+                                <p style = "font-size: 1.8vw; font-weight: bold;">Mekong River</p>
+                                <p style = "font-size: 1.2vw; margin-top: -1.5vw">Thailand</p>
+                                <div class = "other_places_forecast" id = "other_places_forecast">
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Sat.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Sun.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                    <div class = "other_places_forecast_box" id = "other_places_forecast_box">
+                                        <p style = "font-weight: bold; font-size: 1.2vw;">Mon.</p>
+                                        <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
+                                        <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
+                                            <img src = "../static/images/wind2.PNG" style = "width: 2vw; height: 2vw;">
+                                            <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "more_info" id = "more_info">
+                                    <p style = "font-weight: bold; font-size: 1vw;">18:00 (local time)</p>
+                                    <i class="fa-solid fa-angle-up fa-xs" style = "transform: rotate(180deg)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style = "color: #00A66E; font-weight: bold; margin-top: 5vw">News and ranking</p>
+                <div class = "news_and_ranking" id = "news_and_ranking">
+                    <div class = "ranking" id = "ranking">
+                        <p style = "color: #000; font-weight: bold; font-size: 1.7vw; margin-top: -0.5vw;">Live city ranking</p>
+                        <p style = "color: #4d4d4d; font-size: 0.8vw; margin-top: -1vw">Based on the water quality information (WQI)</p>
+                        <div class = "ranking_board" id = "ranking_board">
+                            <div class = "ranking_info">
+                                <p style = "margin-right: 2vw;">#</p>
+                                <p style = "margin-right: 16vw;">MAJOR CITY</p>
+                                <p>WQI</p>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top1">
+                                <p style = "margin-right: 2.1vw;">1</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top2">
+                                <p style = "margin-right: 2.1vw;">2</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top3">
+                                <p style = "margin-right: 2.1vw;">3</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top4">
+                                <p style = "margin-right: 2.1vw;">4</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top5">
+                                <p style = "margin-right: 2.1vw;">5</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top6">
+                                <p style = "margin-right: 2.1vw;">6</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top7">
+                                <p style = "margin-right: 2.1vw;">7</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top8">
+                                <p style = "margin-right: 2.1vw;">8</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top9">
+                                <p style = "margin-right: 2.1vw;">9</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                            <div class = "ranking_tops" id = "ranking_top10">
+                                <p style = "margin-right: 2.1vw; margin-left: -0.5vw">10</p>
+                                <img src = "../static/images/thailand_flag.PNG" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                <p style = "margin-right: 11vw;"><a class = "details">Bangkok, Thailand</a></p>
+                                <div class = "wqi_rank" id = "wqi_rank">33</div>
+                            </div>
+                        </div>
+                        <p style = "font-size: 0.7vw; color: #505050; margin-left: 12vw; margin-top: 2vw;">9:00, August 4</p>
+                        <button class = "full_ranking" id = "full_ranking">SEE FULL RANKING</button>
+                    </div>
+                    <div class = "news" id = "news">
+                        <div class = "headline" id = "headline">
+                            <a href = "article1.html"><img src = "../static/images/article1.png" style = "width: 38vw; height: 27vw;"></a>
+                            <a href = "article1.html"><p style = "font-size: 1.5vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">US agency takes unprecedented action to tackle PFAS water pollution</p></a>
+                            <a href = "article1.html"><p style = "font-size: 1vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
+                            <a href = "article1.html"><p style = "font-size: 1vw; color: #00A66F; margin-left: 0.5vw">2 hours ago</p></a>
+                        </div>
+                        <div class = "news_others" id = "news_others">
+                            <div class = "news_other_articles" id = "news_other_articles">
+                                <a href = "article2.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">The Pacific Ocean's seabed could soon be open for deep-sea mining</p></a>
+                                <a href = "article2.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The world's ocean are polluted by a “plastic smog” made up of an estimated 171 trillion plastic particles that if..."</p></a>
+                                <a href = "article2.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">7 hours ago</p></a>
+                            </div>
+                            <div class = "news_other_articles" id = "news_other_articles">
+                                <a href = "article3.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
+                                <a href = "article3.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
+                                <a href = "article3.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">A day ago</p></a>
+                            </div>
+                            <div class = "news_other_articles" id = "news_other_articles">
+                                <a href = "article4.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Vietnam's groundwater is increasingly polluted</p></a>
+                                <a href = "article4.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Professor Harry explained through examples such as producing 1 sheet of A4 paper requires 10 liters..."</p></a>
+                                <a href = "article4.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Two days ago</p></a>
+                            </div>
+                            <div class = "news_other_articles" id = "news_other_articles">
+                                <a href = "article5.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Current State of Water Pollution Worldwide: WQI Data and Remedial Measures</p></a>
+                                <a href = "article5.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Water is an invaluable resource, essential for all life forms on Earth. However, with the growth of ..."</p></a>
+                                <a href = "article5.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Sat, July 29, 2023</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <footer>
