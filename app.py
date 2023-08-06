@@ -261,6 +261,29 @@ def new_page():
 def travel_page():
     return render_template('travel.html')
 
+@app.route('/details/<rivername>', methods=['GET'])
+def detail_page(rivername):
+    # find watersource by name
+    watersources = WaterSource.query.all()
+    data = {}
+    for watersource in watersources:
+        if len(watersource.measurements) == 0:
+            continue
+        id = watersource.id
+        country = watersource.country
+        name = pycountry.countries.get(alpha_2=country).name
+
+        # currently taking average or first measure just for testing, should be taking the latest measurement
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        flow = round(watersource.measurements[0].flow, 2)
+        temperature = int(watersource.measurements[0].temperature)
+        turbidity = round(watersource.measurements[0].turbidity, 2)
+        followers = random.randrange(0, 1000) # to be implemented
+        if watersource.name == rivername:
+            data = {'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers, 'temperature': temperature, 'flow': flow, 'turbidity': turbidity}
+
+    return render_template('details.html', rivername=rivername, data=data)
+
 @app.route('/info', methods=['GET'])
 def info_page():
     return render_template('info.html')
