@@ -318,7 +318,14 @@ with app.app_context():
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
-    return render_template('index.html')
+    watermeasurements = WaterMeasurement.query.all()
+    
+    data = []
+    for measure in watermeasurements:
+        watersource = WaterSource.query.get(measure.WaterSourceid)
+        data.append([watersource.longitude, watersource.latitude, abs(measure.ph - 7)])
+
+    return render_template('index.html', data=json.dumps(data))
 
 @app.route('/map', methods=['GET'])
 def map_page():

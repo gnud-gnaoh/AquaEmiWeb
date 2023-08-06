@@ -42,16 +42,12 @@
             <script>
                 var map = L.map('map', {
                     center: [51.505, -0.09],
-                    zoom: 5
+                    zoom: 3
                 });
                     
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 
-                var heat = L.heatLayer([
-                    [-6, -81, 0.6],
-                    [12, 38, 0.8],
-                    [23, 78, 0.3],
-                ], {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+                var heat = L.heatLayer({{data | safe}}, {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
             </script>
             <div class = "quality" id = "quality">
                 <div class = "location" id = "location">
