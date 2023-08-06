@@ -358,7 +358,7 @@ def earth_page():
         "type": "FeatureCollection",
         "features": features
     }
-    print(json.dumps(data))
+    
     return render_template('map_earth.html', data=json.dumps(data))
 
 @app.route('/rankings', methods=['GET'])
