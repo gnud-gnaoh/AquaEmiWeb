@@ -2,8 +2,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ251ZGduYW9oIiwiYSI6ImNsa3IxYnNxeTByMzAzZmw5b
 const map = new mapboxgl.Map({
     container: 'map',
     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    // style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    // style: 'mapbox://styles/mapbox/dark-v11',
     center: [-130, 50],
     zoom: 2.5
 });
