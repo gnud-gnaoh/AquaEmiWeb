@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = 'mysql://<username>:<password>@<host>:<port>/<database_name>'
+SQLALCHEMY_DATABASE_URI = 'mysql://myuser:password@192.168.1.19:3306/mydb'
 SECRET_KEY = 'insert your own secret key'
 DEBUG = False
 SQLALCHEMY_ECHO = False

@@ -14,8 +14,8 @@ app.config.from_pyfile('config.py')
 db.init_app(app)
 
 # would this still work?
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 # water_source api
 @app.route('/water_source', methods=['GET'])
@@ -195,7 +195,10 @@ def home_page():
     for id, val in enumerate(countries_data):
         val['id'] = id + 1
 
-    return render_template('index.html', data=json.dumps(data), countries_data=countries_data)
+    # get location of request and find closest water source
+    
+    current = {'name': 'Sai Gon River', 'country': 'Vietnam', 'temperature': 20, 'quality': 201, 'flow': 12.23, 'turbidity': 5.23}
+    return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current)
 
 @app.route('/map', methods=['GET'])
 def map_page():
@@ -217,7 +220,7 @@ def earth_page():
         watersource = WaterSource.query.get(measure.WaterSourceid)
         features.append({
             "type": "Feature",
-            "properties": {"mag": abs(measure.ph - 7) * 100},
+            "properties": {"mag": abs(measure.ph - 7) * 100}, # currently set the quality function just from the ph
             "geometry": {
                 "type": "Point",
                 "coordinates": [watersource.longitude, watersource.latitude]
@@ -241,7 +244,7 @@ def rank_page():
         id = watersource.id
         country = watersource.country
         name = pycountry.countries.get(alpha_2=country).name
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # currently set the quality function just from the ph
         followers = random.randrange(0, 1000) # to be implemented
         data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
 
