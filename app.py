@@ -174,7 +174,7 @@ def home_page():
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
-        data.append([watersource.longitude, watersource.latitude, abs(measure.ph - 7)])
+        data.append([watersource.latitude, watersource.longitude, abs(measure.ph - 7)])
 
     watersources = WaterSource.query.all()
     countries_data = []
@@ -207,7 +207,7 @@ def map_page():
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
-        data.append([watersource.longitude, watersource.latitude, abs(measure.ph - 7)])
+        data.append([watersource.latitude, watersource.longitude, abs(measure.ph - 7)])
 
     return render_template('map.html', data=json.dumps(data))
 
