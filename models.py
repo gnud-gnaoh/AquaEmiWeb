@@ -12,7 +12,7 @@ class WaterSource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    name = db.Column(db.String(80))
+    name = db.Column(db.String(300))
     country = db.Column(db.String(80))
     measurements = db.relationship('WaterMeasurement', backref='Watersource')
 
@@ -55,6 +55,8 @@ class WaterMeasurement(db.Model):
     conductivity = db.Column(db.Float)
     temperature = db.Column(db.Float)
     flow = db.Column(db.Float)
+    DO = db.Column(db.Float) # dissolved oxygen
+    BOD = db.Column(db.Float) # Biochemical oxygen demand
     datetime = db.Column(db.DateTime)
 
     def create(self):
@@ -62,13 +64,15 @@ class WaterMeasurement(db.Model):
         db.session.commit()
         return self
     
-    def __init__(self, WaterSourceid, ph, turbidity, conductivity, temperature, flow):
+    def __init__(self, WaterSourceid, ph, turbidity, conductivity, temperature, flow, DO, BOD):
         self.WaterSourceid = WaterSourceid
         self.ph = ph
         self.turbidity = turbidity
         self.conductivity = conductivity
         self.temperature = temperature
         self.flow = flow
+        self.DO = DO
+        self.BOD = BOD
         self.datetime = datetime.datetime.utcnow()
 
     def __repr__(self):
@@ -86,6 +90,8 @@ class WaterMeasurementSchema(SQLAlchemySchema):
     conductivity = fields.Float(required=True)
     temperature = fields.Float(required=True)
     flow = fields.Float(required=True)
+    DO = fields.Float(required=True)
+    BOD = fields.Float(required=True)
     datetime = fields.DateTime(dump_only=True)
 
     @post_load
