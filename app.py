@@ -13,7 +13,7 @@ app.config.from_object('config')
 
 db.init_app(app)
 
-# would this still work?
+# for initializing the database
 # with app.app_context():
 #     db.create_all()
 
@@ -182,8 +182,8 @@ def home_page():
         if len(watersource.measurements) == 0:
             continue
         id = watersource.id
-        country = watersource.country
-        name = pycountry.countries.get(alpha_2=country).name
+        country = watersource.country # TODO: change to country code
+        name = watersource.country # TODO: find closest river
         quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
         followers = random.randrange(0, 1000) # to be implemented
         countries_data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
@@ -195,8 +195,7 @@ def home_page():
     for id, val in enumerate(countries_data):
         val['id'] = id + 1
 
-    # get location of request and find closest water source
-    
+    # TODO: get location of request and find closest water source
     current = {'name': 'Sai Gon River', 'country': 'Vietnam', 'temperature': 20, 'quality': 201, 'flow': 12.23, 'turbidity': 5.23}
     return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current)
 
@@ -237,14 +236,14 @@ def earth_page():
 @app.route('/rankings', methods=['GET'])
 def rank_page():
     watersources = WaterSource.query.all()
-    data = []
+    data = [] # TODO: merge watersources from same country
     for watersource in watersources:
         if len(watersource.measurements) == 0:
             continue
         id = watersource.id
-        country = watersource.country
-        name = pycountry.countries.get(alpha_2=country).name
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # currently set the quality function just from the ph
+        country = watersource.country # TODO: change to country code
+        name = watersource.country # TODO: find nearest river?
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # TODO: change quality function
         followers = random.randrange(0, 1000) # to be implemented
         data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
 
@@ -273,11 +272,10 @@ def detail_page(rivername):
         if len(watersource.measurements) == 0:
             continue
         id = watersource.id
-        country = watersource.country
-        name = pycountry.countries.get(alpha_2=country).name
+        country = watersource.country # TODO: change to country code
+        name = watersource.country # TODO: find nearest river?
 
-        # currently taking average or first measure just for testing, should be taking the latest measurement
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # TODO: change quality function
         flow = round(watersource.measurements[0].flow, 2)
         temperature = int(watersource.measurements[0].temperature)
         turbidity = round(watersource.measurements[0].turbidity, 2)
