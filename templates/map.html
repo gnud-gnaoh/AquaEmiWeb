@@ -49,7 +49,7 @@
                     
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 
-                    var heat = L.heatLayer({{data | safe}}, {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+                    var heat = L.heatLayer({{data | safe}}, {radius: 15, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
                 </script>
                 <div class = "earth_map" id = "earth_map">
                     <span class = "remove_ranking" id = "remove_ranking"><i class="fa-solid fa-x fa-2xs" style="color: #ffffff;"></i></span>
