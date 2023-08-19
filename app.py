@@ -6,6 +6,7 @@ from marshmallow import fields, post_load
 from models import db, WaterSource, WaterSourceSchema, WaterMeasurement, WaterMeasurementSchema, WaterMeasurementApp, WaterMeasurementAppSchema
 import pycountry
 import random
+from collections import defaultdict
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
@@ -166,6 +167,46 @@ def water_measurement_app_delete_by_id(id):
     return make_response("", 204)
 
 # Views
+
+# standard_values = {'ph':8.5,
+#             'turbidity':5, 
+#             'conductivity':300,
+#             'BOD':5, # is the data measure in ppm?
+#             'DO':5,
+#             'temperature':20}
+standard_values =   [8.5,5,300,40,5]
+ideal_values =      [7  ,0,0  ,0,14.6]
+
+def calculate_WQI(data):
+    standard_values_inverse = map(lambda x:1/x, standard_values)
+    K = 1 / sum(standard_values_inverse)
+    W = list(map(lambda x:K/x, standard_values))
+
+    V = []
+    # V.append(data['ph'])
+    # V.append(data['turbidity'])
+    # V.append(data['conductivity'])
+    # V.append(data['BOD'])
+    # V.append(data['DO'])
+    V.append(data.ph)
+    V.append(data.turbidity)
+    V.append(data.conductivity)
+    V.append(data.BOD)
+    V.append(data.DO)
+    
+    vs = [0 for _ in range(5)]
+    for i in range(5):
+        if ideal_values[i] != 0:
+            vs[i] = abs(V[i] - ideal_values[i]) / abs(standard_values[i] - ideal_values[i])
+        else:
+            vs[i] = V[i] / standard_values[i]
+
+    Q = list(map(lambda x:100*x, vs))
+    WQ = [W[i] * Q[i] for i in range(5)]
+    WQI = sum(WQ) / sum(W)
+    
+    return WQI
+
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
@@ -174,19 +215,22 @@ def home_page():
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
-        data.append([watersource.latitude, watersource.longitude, abs(measure.ph - 7)])
+        data.append([watersource.latitude, watersource.longitude, calculate_WQI(measure)])
 
     watersources = WaterSource.query.all()
-    countries_data = []
+    countries_data_map = defaultdict(list)
     for watersource in watersources:
         if len(watersource.measurements) == 0:
             continue
-        id = watersource.id
         country = watersource.country # TODO: change to country code
-        name = watersource.country # TODO: find closest river
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements))
+        quality = sum(calculate_WQI(measurement) for measurement in watersource.measurements) / len(watersource.measurements)
+        countries_data_map[country].append(quality)
+    
+    countries_data = []
+    for country, quality_list in countries_data_map.items():
+        quality = int(sum(quality_list) / len(quality_list))
         followers = random.randrange(0, 1000) # to be implemented
-        countries_data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
+        countries_data.append({'id': 0, 'country': country, 'name': country, 'quality': quality, 'followers': followers})
 
     countries_data.sort(key=lambda d: d['quality'])
     countries_data = countries_data[:10] # take top 10
@@ -202,11 +246,17 @@ def home_page():
 @app.route('/map', methods=['GET'])
 def map_page():
     watermeasurements = WaterMeasurement.query.all()
-    
+    # with open('static/measurements.json') as data_file:
+    #     file_content = data_file.read()
+
+    # watermeasurements = json.loads(file_content)
+
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
         data.append([watersource.latitude, watersource.longitude, abs(measure.ph - 7)])
+        # watersource = WaterSource.query.get(measure['WaterSourceid'])
+        # data.append([watersource.latitude, watersource.longitude, abs(measure['ph'] - 7)])
 
     return render_template('map.html', data=json.dumps(data))
 
