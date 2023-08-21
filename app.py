@@ -174,7 +174,7 @@ def water_measurement_app_delete_by_id(id):
 #             'BOD':5, # is the data measure in ppm?
 #             'DO':5,
 #             'temperature':20}
-standard_values =   [8.5,5,300,40,5]
+standard_values =   [8.5,50,300,40,5]
 ideal_values =      [7  ,0,0  ,0,14.6]
 
 def calculate_WQI(data):
@@ -254,7 +254,8 @@ def map_page():
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
-        data.append([watersource.latitude, watersource.longitude, abs(measure.ph - 7)])
+        quality = sum(calculate_WQI(measurement) for measurement in watersource.measurements) / len(watersource.measurements)
+        data.append([watersource.latitude, watersource.longitude, quality])
         # watersource = WaterSource.query.get(measure['WaterSourceid'])
         # data.append([watersource.latitude, watersource.longitude, abs(measure['ph'] - 7)])
 
@@ -267,9 +268,10 @@ def earth_page():
     features = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
+        quality = sum(calculate_WQI(measurement) for measurement in watersource.measurements) / len(watersource.measurements)
         features.append({
             "type": "Feature",
-            "properties": {"mag": abs(measure.ph - 7) * 100}, # currently set the quality function just from the ph
+            "properties": {"mag": quality},
             "geometry": {
                 "type": "Point",
                 "coordinates": [watersource.longitude, watersource.latitude]
@@ -284,26 +286,30 @@ def earth_page():
     return render_template('map_earth.html', data=json.dumps(data))
 
 @app.route('/rankings', methods=['GET'])
-def rank_page():
+def rank_page():  
     watersources = WaterSource.query.all()
-    data = [] # TODO: merge watersources from same country
+    countries_data_map = defaultdict(list)
     for watersource in watersources:
         if len(watersource.measurements) == 0:
             continue
-        id = watersource.id
         country = watersource.country # TODO: change to country code
-        name = watersource.country # TODO: find nearest river?
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # TODO: change quality function
+        quality = sum(calculate_WQI(measurement) for measurement in watersource.measurements) / len(watersource.measurements)
+        countries_data_map[country].append(quality)
+    
+    countries_data = []
+    for country, quality_list in countries_data_map.items():
+        quality = int(sum(quality_list) / len(quality_list))
         followers = random.randrange(0, 1000) # to be implemented
-        data.append({'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers})
+        countries_data.append({'id': 0, 'country': country, 'name': country, 'quality': quality, 'followers': followers})
 
-    data.sort(key=lambda d: d['quality'])
+    countries_data.sort(key=lambda d: d['quality'])
+    countries_data = countries_data[:10] # take top 10
 
     # renumber id
-    for id, val in enumerate(data):
+    for id, val in enumerate(countries_data):
         val['id'] = id + 1
-    
-    return render_template('rankings.html', data=data)
+
+    return render_template('rankings.html', data=countries_data)
 
 @app.route('/news', methods=['GET'])
 def new_page():
@@ -318,22 +324,24 @@ def detail_page(rivername):
     # find watersource by name
     watersources = WaterSource.query.all()
     data = {}
+    watersources_data = []
     for watersource in watersources:
         if len(watersource.measurements) == 0:
             continue
         id = watersource.id
         country = watersource.country # TODO: change to country code
-        name = watersource.country # TODO: find nearest river?
-
-        quality = int(sum(abs(measurement.ph - 7) * 50 for measurement in watersource.measurements) / len(watersource.measurements)) # TODO: change quality function
+        name = watersource.name # TODO: find nearest river?
+        quality = int(sum(calculate_WQI(measurement) for measurement in watersource.measurements) / len(watersource.measurements))
         flow = round(watersource.measurements[0].flow, 2)
         temperature = int(watersource.measurements[0].temperature)
         turbidity = round(watersource.measurements[0].turbidity, 2)
         followers = random.randrange(0, 1000) # to be implemented
         if watersource.name == rivername:
             data = {'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers, 'temperature': temperature, 'flow': flow, 'turbidity': turbidity}
+        if len(watersources_data) < 10:
+            watersources_data.append({'name': name, 'quality': quality, 'followers': followers})
 
-    return render_template('details.html', rivername=rivername, data=data)
+    return render_template('details.html', rivername=rivername, data=data, watersources_data=watersources_data)
 
 @app.route('/info', methods=['GET'])
 def info_page():
