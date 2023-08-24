@@ -3,6 +3,8 @@ import pycountry
 import random
 import requests
 import country_converter
+import pandas as pd
+import forecast
 from flask import Flask, request, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
@@ -311,6 +313,28 @@ def get_watersource_data_by_name(rivername):
             return {'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers, 'temperature': temperature, 'flow': flow, 'turbidity': turbidity}
     return None
 
+def get_predict_data(data, data_type):
+    data = pd.Series(data, index=pd.date_range(start='1/1/2021',periods=len(data)))
+    model = forecast.get_best_model(data_type, data)
+    result = forecast.forecast(model, steps=7)[0].tolist()
+    return result
+
+def predict_measurements(watersource):
+    data_len = min(5, len(watersource.measurements))
+    temp_data = [i.temperature for i in watersource.measurements[-data_len:]]
+    do_data = [i.DO for i in watersource.measurements[-data_len:]]
+    ec_data = [i.conductivity for i in watersource.measurements[-data_len:]]
+    ph_data = [i.ph for i in watersource.measurements[-data_len:]]
+    pre_temp_data = get_predict_data(temp_data, "TEMP")
+    pre_do_data = get_predict_data(do_data, "DO")
+    pre_ec_data = get_predict_data(ec_data, "EC")
+    pre_ph_data = get_predict_data(ph_data, "PH")
+    final_data = [{"TEMP": int(pre_temp_data[i]),
+                   "DO": round(pre_do_data[i], 2),
+                   "EC": round(pre_ec_data[i], 2),
+                   "PH": round(pre_ph_data[i], 1)} for i in range(7)]
+    return final_data
+
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
@@ -335,7 +359,8 @@ def home_page():
         'flow': round(closest_watersource.measurements[-1].flow, 2),
         'turbidity': round(closest_watersource.measurements[-1].turbidity,2)
     }
-    return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current, watersources_data=watersources_data)
+
+    return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current, watersources_data=watersources_data, predicts=predict_measurements(closest_watersource))
 
 @app.route('/map', methods=['GET'])
 def map_page():
