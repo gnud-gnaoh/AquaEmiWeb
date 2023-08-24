@@ -56,9 +56,9 @@
                             <p><a href = "info" title = "Info" style = "text-decoration: none; color: #00A66F;">Info</a></p>
                         </div>
                         <div class = "tools" id = "tools">
-                            <img src = "../static/images/search.PNG" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
-                            <a href = "index"><img src = "../static/images/notifications.PNG" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
-                            <a href = "index"><img src = "../static/images/profile.PNG" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
+                            <img src = "../static/images/search.png" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
+                            <a href = "index"><img src = "../static/images/notifications.png" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
+                            <a href = "index"><img src = "../static/images/profile.png" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
                         </div>
                     </div>
                 </div>
@@ -67,14 +67,14 @@
         <section>
             <div class = "overlay_search" id = "overlay_search">
                 <div class = "search_bar" id = "search_bar">
-                    <img src = "../static/images/search_back.PNG" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
+                    <img src = "../static/images/search_back.png" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
                     <input type = "text" id = "search_content" name = "search_content" placeholder = "Enter your location..." style = "font-size: 1vw;">
                     <i class="fa-solid fa-x fa-2xs" style="color: #00a56f;" id = "clear_search" onclick = "document.getElementById('search_content').value = ''"></i>
                 </div>
                 <div class = "search_result_box" id = "search_result_box">
                     {% for watersource in watersources_data %}
                         <div class = "search_result" id = "search_result" data_search_term="{{watersource.name}}" style="display: none;" onclick="location.href='{{url_for('detail_page', rivername=watersource.name)}}';">
-                            <img src = "../static/images/location.PNG" style = "width: 1vw; height: 1.3vw;">
+                            <img src = "../static/images/location.png" style = "width: 1vw; height: 1.3vw;">
                             <p style = "font-size: 1vw; color: #616161; margin: 0.2vw 0 0 0.7vw; ">{{watersource.name}}</p>
                             <p style = "font-size: 0.8vw; font-weight: bold; margin: 0.3vw 0 0 0.7vw;">{{watersource.followers}}</p>
                             <div class = "wqi_search_result" id = "wqi_search_result">{{watersource.quality}}</div>
@@ -115,7 +115,7 @@
                             <p style = "font-size: 1vw;">Under the treaty, the seabed and its mineral resources are considered the "common heritage of mankind" that must be managed in a way that protects the interests of humanity through the sharing of economic benefits, support for marine scientific research, and protecting marine environments.</p>
                             <p style = "font-size: 1vw;">Mining companies interested in deep sea exploitation are partnering with countries to help them get exploration licenses.</p>
                             <p style = "font-size: 1vw;">More than 30 exploration licenses have been issued so far, with activity mostly focused in an area called the Clarion-Clipperton Fracture Zone, which spans 4.5 million square kilometres in the Pacific Ocean between Hawaii and Mexico.</p>
-                            <img src="../static/images/picture1_article2.PNG" alt="AquaEmi's Article2 first picture" style = "width: 100%; height: 100%;">
+                            <img src="../static/images/picture1_article2.png" alt="AquaEmi's Article2 first picture" style = "width: 100%; height: 100%;">
                             <p style = "font-size: 0.8vw; font-style: italic; margin: 1vw 4vw">Mining exploration areas shown in orange in the CCZ, with Hawaii to the north-west, Kiribati in the south-west and Mexico to the east.(Supplied: Frontiers in Marine Science/Travis Washburn et al)</p>
                             <p style = "font-size: 1.5vw; font-weight: bold;">What are the environmental concerns?</p>
                             <p style = "font-size: 1vw;">Only a small part of the deep seabed has been explored and conservationists worry that ecosystems will be damaged by mining, especially without any environmental protocols.</p>
@@ -123,13 +123,13 @@
                             <p style = "font-size: 1vw;">The full extent of implications for deep sea ecosystems is unclear, but scientists have warned that biodiversity loss is inevitable and potentially irreversible.</p>
                             <p style = "font-size: 1vw;"><a href = "https://www.abc.net.au/news/2023-04-07/pacific-fears-grow-as-deep-sea-mining-applications-set-to-open/102182066" style = "text-decoration: none; font-weight: bold; color:#00cf8a">Cook Island resident Alanna Smith said earlier this year</a> that any damage to ocean ecosystems would be devastating for her country, where the sea is central to life.</p>
                             <p style = "font-size: 1vw;">"I've always admired watching my aunties out on the reefs, getting seafood to bring home, so it's provided for us," she told Pacific Beat. </p>
-                            <img src="../static/images/picture2_article2.PNG" alt="AquaEmi's Article2 second picture" style = "width: 90%; height: 90%; margin: 0 1.5vw">
+                            <img src="../static/images/picture2_article2.png" alt="AquaEmi's Article2 second picture" style = "width: 90%; height: 90%; margin: 0 1.5vw">
                             <p style = "font-size: 0.8vw; font-style: italic; margin: 0.5vw 4vw">Alanna Smith says Pacific Islanders have a spiritual connection to the deep sea.(Facebook: Alanna Smith)</p>
                             <p style = "font-size: 1vw;">Ms Smith now works for an environmental NGO called Te Ipukarea Society, which advocates for protecting the ocean.</p>
                             <p style = "font-size: 1vw;">She said it was too early to consider deep-sea mining in the area.</p>
                             <p style = "font-size: 1.2vw; text-align: center;">"[It] is very concerning given there's still a lot of data and research that has to be collected," Ms Smith said.</p>
                             <p style = "font-size: 1vw;">"We're constantly finding new stuff and it's a little bit premature to start mining the deep sea when we don't really understand the biology, the environments, the ecosystems or anything else," said Christopher Kelley, a biologist with research expertise in deep-sea ecology.</p>
-                            <img src="../static/images/picture3_article2.PNG" alt="AquaEmi's Article2 third picture" style = "width: 90%; height: 90%; margin: 0 1.5vw">
+                            <img src="../static/images/picture3_article2.png" alt="AquaEmi's Article2 third picture" style = "width: 90%; height: 90%; margin: 0 1.5vw">
                             <p style = "font-size: 0.8vw; font-style: italic; margin: 0.5vw 4vw">Environmental advocates say not enough is known about the impacts of deep-sea mining.(Nautilus Minerals)</p>
                             <p style = "font-size: 1.5vw; font-weight: bold;">What's next?</p>
                             <p style = "font-size: 1vw;">The ISA's Legal and Technical Commission, which oversees the development of deep-sea mining regulations, will meet in early July to discuss the yet-to-be mining code draft.</p>

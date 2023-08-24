@@ -56,9 +56,9 @@
                             <p><a href = "info" title = "Info" style = "text-decoration: none; color: #00A66F;">Info</a></p>
                         </div>
                         <div class = "tools" id = "tools">
-                            <img src = "../static/images/search.PNG" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
-                            <a href = "index"><img src = "../static/images/notifications.PNG" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
-                            <a href = "index"><img src = "../static/images/profile.PNG" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
+                            <img src = "../static/images/search.png" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
+                            <a href = "index"><img src = "../static/images/notifications.png" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
+                            <a href = "index"><img src = "../static/images/profile.png" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
                         </div>
                     </div>
                 </div>
@@ -67,14 +67,14 @@
         <section>
             <div class = "overlay_search" id = "overlay_search">
                 <div class = "search_bar" id = "search_bar">
-                    <img src = "../static/images/search_back.PNG" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
+                    <img src = "../static/images/search_back.png" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
                     <input type = "text" id = "search_content" name = "search_content" placeholder = "Enter your location..." style = "font-size: 1vw;">
                     <i class="fa-solid fa-x fa-2xs" style="color: #00a56f;" id = "clear_search" onclick = "document.getElementById('search_content').value = ''"></i>
                 </div>
                 <div class = "search_result_box" id = "search_result_box">
                     {% for watersource in watersources_data %}
                         <div class = "search_result" id = "search_result" data_search_term="{{watersource.name}}" style="display: none;" onclick="location.href='{{url_for('detail_page', rivername=watersource.name)}}';">
-                            <img src = "../static/images/location.PNG" style = "width: 1vw; height: 1.3vw;">
+                            <img src = "../static/images/location.png" style = "width: 1vw; height: 1.3vw;">
                             <p style = "font-size: 1vw; color: #616161; margin: 0.2vw 0 0 0.7vw; ">{{watersource.name}}</p>
                             <p style = "font-size: 0.8vw; font-weight: bold; margin: 0.3vw 0 0 0.7vw;">{{watersource.followers}}</p>
                             <div class = "wqi_search_result" id = "wqi_search_result">{{watersource.quality}}</div>
@@ -107,7 +107,7 @@
                             <p style = "font-size: 1vw;">Once plastic gets into the ocean, it doesn’t decompose but instead tends to break down into tiny pieces. These particles “are really not easily cleaned up, we’re stuck with them,” Erdle said.</p>
                             <p style = "font-size: 1vw;">Marine life can get entangled in plastic or mistake it for food. Plastic can also leach toxic chemicals into the water.</p>
                             <p style = "font-size: 1vw;">And it isn’t just an environmental disaster; plastic is also a <a href = "https://www.cnn.com/2022/09/16/us/plastic-recycling-climate-impact-lbg/index.html" style = "text-decoration: none; color: #00cf8a; font-weight: bold;">huge climate problem</a>. Fossil fuels are the raw ingredient for most plastics, and they produce planet-heating pollution throughout their lifecycle – from production to disposal</p>
-                            <img src="../static/images/picture1_article3.PNG" alt="AquaEmi's Article3 first picture" style = "width: 100%; height: 100%;">
+                            <img src="../static/images/picture1_article3.png" alt="AquaEmi's Article3 first picture" style = "width: 100%; height: 100%;">
                             <p style = "font-size: 0.8vw; font-style: italic; margin: 1vw 4vw">Plastic pollution on a beach in Honduras.</p>
                             <p style = "font-size: 1vw;">Figuring out exactly how much plastic is in the ocean is a hard exercise. “The ocean is a complex place. There are lots of ocean currents, there are changes over time due to weather and due to conditions on the ground,” Erdle said.</p>
                             <p style = "font-size: 1vw;">The researchers spent years poring over peer-reviewed papers as well as unpublished findings from other scientists to try to collate the most extensive record they could – both in terms of timeframe and geography.</p>
@@ -115,7 +115,7 @@
                             <p style = "font-size: 1vw;">“This research opened my eyes to how challenging plastic in the ocean is to measure and characterize and underscores the need for real solutions to the problem,” Win Cowger, a research scientist at Moore Institute for Plastic Pollution Research in California and a study author, said in a statement.</p>
                             <p style = "font-size: 1vw;">Since the 1970s, there has been a slew of agreements aimed at stemming the tide of plastic pollution reaching the ocean, yet they are mostly voluntary, fragmented and rarely include measurable targets, the study noted.</p>
                             <p style = "font-size: 1vw;">The study authors call for urgent international policy intervention. “We clearly need some solutions that have teeth,” Erdle said.</p>
-                            <img src="../static/images/picture2_article3.PNG" alt="AquaEmi's Article3 second picture" style = "width: 100%; height: 100%;">
+                            <img src="../static/images/picture2_article3.png" alt="AquaEmi's Article3 second picture" style = "width: 100%; height: 100%;">
                             <p style = "font-size: 0.8vw; font-style: italic; margin: 1vw 4vw">A bird is surrounded by ocean plastic on the Northwestern Hawaiian Islands.</p>
                             <p style = "font-size: 1vw;">The United Nations has agreed to create a <a href = "https://www.cnn.com/2022/03/02/world/plastics-treaty-environment-climate-un-intl/index.html" style = "text-decoration: none; color: #00cf8a; font-weight: bold;">legally binding global plastics treaty</a> by 2024, which would address the whole life of plastics from production to disposal. But big divisions remain over whether this should include cuts in plastic manufacturing, which is predicted to <a href = "https://www.science.org/content/article/next-30-years-we-ll-make-four-times-more-plastic-waste-we-ever-have" style = "text-decoration: none; color:#00cf8a; font-weight: bold;">quadruple</a> by 2050.</p>
                             <p style = "font-size: 1vw;">Judith Enck, a former EPA regional administrator and now-president of Beyond Plastics, a non-profit focused on research and consumer education, said that policies to reduce the amount of plastic produced in the first place are the only real solution, especially as companies are continuing to find new ways to pump more plastics into the market.</p>

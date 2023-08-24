@@ -56,9 +56,9 @@
                             <p><a href = "info" title = "Info" style = "text-decoration: none; color: #00A66F;">Info</a></p>
                         </div>
                         <div class = "tools" id = "tools">
-                            <img src = "../static/images/search.PNG" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
-                            <a href = "index"><img src = "../static/images/notifications.PNG" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
-                            <a href = "index"><img src = "../static/images/profile.PNG" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
+                            <img src = "../static/images/search.png" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
+                            <a href = "index"><img src = "../static/images/notifications.png" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
+                            <a href = "index"><img src = "../static/images/profile.png" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
                         </div>
                     </div>
                 </div>
@@ -67,14 +67,14 @@
         <section>
             <div class = "overlay_search" id = "overlay_search">
                 <div class = "search_bar" id = "search_bar">
-                    <img src = "../static/images/search_back.PNG" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
+                    <img src = "../static/images/search_back.png" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
                     <input type = "text" id = "search_content" name = "search_content" placeholder = "Enter your location..." style = "font-size: 1vw;">
                     <i class="fa-solid fa-x fa-2xs" style="color: #00a56f;" id = "clear_search" onclick = "document.getElementById('search_content').value = ''"></i>
                 </div>
                 <div class = "search_result_box" id = "search_result_box">
                     {% for watersource in watersources_data %}
                         <div class = "search_result" id = "search_result" data_search_term="{{watersource.name}}" style="display: none;" onclick="location.href='{{url_for('detail_page', rivername=watersource.name)}}';">
-                            <img src = "../static/images/location.PNG" style = "width: 1vw; height: 1.3vw;">
+                            <img src = "../static/images/location.png" style = "width: 1vw; height: 1.3vw;">
                             <p style = "font-size: 1vw; color: #616161; margin: 0.2vw 0 0 0.7vw; ">{{watersource.name}}</p>
                             <p style = "font-size: 0.8vw; font-weight: bold; margin: 0.3vw 0 0 0.7vw;">{{watersource.followers}}</p>
                             <div class = "wqi_search_result" id = "wqi_search_result">{{watersource.quality}}</div>
