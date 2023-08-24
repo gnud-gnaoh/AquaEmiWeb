@@ -2,6 +2,7 @@ import json
 import pycountry
 import random
 import requests
+import country_converter
 from flask import Flask, request, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
@@ -15,6 +16,7 @@ app.config.from_object('config')
 # app.config.from_pyfile('config.py')
 
 db.init_app(app)
+app.app_context().push()
 
 # for initializing the database
 # with app.app_context():
@@ -169,6 +171,8 @@ def water_measurement_app_delete_by_id(id):
     return make_response("", 204)
 
 # Views
+watersources = WaterSource.query.all()
+watermeasurements = WaterMeasurement.query.all()
 
 # standard_values = {'ph':8.5,
 #             'turbidity':5, 
@@ -209,7 +213,6 @@ def calculate_WQI(data):
     
     return WQI
 
-# uses https://ipapi.co/api/
 def get_ip():
     response = requests.get('https://api.ipify.org?format=json').json()
     print(response)
@@ -252,7 +255,6 @@ def cleanup_name(name):
     return ','.join(parts)
 
 def get_watersources_data():
-    watersources = WaterSource.query.all()
     watersources_data = []
     for watersource in watersources:
         if len(watersource.measurements) == 0:
@@ -264,7 +266,6 @@ def get_watersources_data():
     return watersources_data
 
 def get_countries_data():
-    watersources = WaterSource.query.all()
     countries_data_map = defaultdict(list)
     for watersource in watersources:
         if len(watersource.measurements) == 0:
@@ -277,7 +278,7 @@ def get_countries_data():
     for country, quality_list in countries_data_map.items():
         quality = int(sum(quality_list) / len(quality_list))
         followers = random.randrange(0, 1000) # to be implemented
-        countries_data.append({'id': 0, 'country': country, 'name': country, 'quality': quality, 'followers': followers})
+        countries_data.append({'id': 0, 'country': country, 'country_code': country_converter.convert(names=[country],to='ISO2'),'name': country, 'quality': quality, 'followers': followers})
 
     countries_data.sort(key=lambda d: d['quality'])
     countries_data = countries_data[:10] # take top 10
@@ -289,7 +290,6 @@ def get_countries_data():
     return countries_data
 
 def get_closest_watersource(lat, lon):
-    watersources = WaterSource.query.all()
     closest_watersource = watersources[0]
     for watersource in watersources:
         if distance(lat, lon, closest_watersource.latitude, closest_watersource.longitude) \
@@ -298,7 +298,6 @@ def get_closest_watersource(lat, lon):
     return closest_watersource
 
 def get_watersource_data_by_name(rivername):
-    watersources = WaterSource.query.all()
     for watersource in watersources:
         if watersource.name == rivername:
             id = watersource.id
@@ -315,8 +314,6 @@ def get_watersource_data_by_name(rivername):
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
-    watermeasurements = WaterMeasurement.query.all()
-    
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
@@ -325,7 +322,7 @@ def home_page():
     watersources_data = get_watersources_data()
     countries_data = get_countries_data()
 
-    # get location of request and find closest water source
+    # get location of request
     location_data = get_location()
     closest_watersource = get_closest_watersource(location_data['latitude'], location_data['longitude'])
     
@@ -342,7 +339,6 @@ def home_page():
 
 @app.route('/map', methods=['GET'])
 def map_page():
-    watermeasurements = WaterMeasurement.query.all()
     data = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
@@ -354,8 +350,6 @@ def map_page():
 
 @app.route('/map_earth', methods=['GET'])
 def earth_page():
-    watermeasurements = WaterMeasurement.query.all()
-    
     features = []
     for measure in watermeasurements:
         watersource = WaterSource.query.get(measure.WaterSourceid)
