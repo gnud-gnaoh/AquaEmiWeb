@@ -103,8 +103,8 @@
             </script>
             <div class = "quality" id = "quality" onclick="location.href='details/{{ current.name | safe }}';">
                 <div class = "location" id = "location">
-                    <p style = "font-size: 3vw; font-weight: bolder; margin-top: 1.2vw;">{{ current.name }}</p>
-                    <p style = "font-size: 1vw; font-weight: light; margin-top: -2.5vw;">{{ current.country }}</p>
+                    <p style = "font-size: 2vw; font-weight: bolder; margin-top: 1.2vw;">{{ current.display_name }}</p>
+                    <p style = "font-size: 1vw; font-weight: light; margin-top: -2.0vw;">{{ current.country }}</p>
                 </div>
                 <div class = "quality_box_content" id = "quality_box_content">
                     <div class = "quality_box" id = "quality_box">
@@ -390,7 +390,7 @@
                             {% for country in countries_data %}
                                 <div class = "ranking_tops" id = "ranking_top{{ country.id }}">
                                     <p style = "margin-right: 2.1vw;"> {{ country.id }} </p>
-                                    <img src = "https://flagsapi.com/{{ country.country }}/flat/64.png" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
+                                    <img src = "https://flagsapi.com/{{ country.country_code }}/flat/64.png" style = "width: 1.5vw; height: 1vw; margin: 1.2vw 0.4vw 0 0;">
                                     <p style = "margin-right: 11vw;"><a class = "details"> {{ country.name }} </a></p>
                                     <div class = "wqi_rank"> {{ country.quality }} </div>
                                 </div>
