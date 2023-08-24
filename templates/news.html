@@ -37,35 +37,35 @@
                 </div>
                 <div class = "news_content" id = "news_content">
                     <div class = "headline" id = "headline">
-                        <a href = "article1.html"><img src = "../static/images/article1.png" alt="AquaEmi's first article" style = "width: 100%; height: 70%;"></a>
-                        <a href = "article1.html" class = "name"><p style = "font-size: 2vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw;">US agency takes unprecedented action to tackle PFAS water pollution</p>
-                        <a href = "article1.html"><p style = "font-size: 1vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic;">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
-                        <a href = "article1.html"><p style = "font-size: 1vw; color: #00A66F; margin-left: 0.5vw">2 hours ago</p></a>
+                        <a href = "{{ url_for('article1_page') }}"><img src = "../static/images/article1.png" alt="AquaEmi's first article" style = "width: 100%; height: 70%;"></a>
+                        <a href = "{{ url_for('article1_page') }}" class = "name"><p style = "font-size: 2vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw;">US agency takes unprecedented action to tackle PFAS water pollution</p>
+                        <a href = "{{ url_for('article1_page') }}"><p style = "font-size: 1vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic;">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
+                        <a href = "{{ url_for('article1_page') }}"><p style = "font-size: 1vw; color: #00A66F; margin-left: 0.5vw">2 hours ago</p></a>
                     </div>
                     <div class = "headline_others" id = "headline_others">
                         <div class = "small_article" id = "small_article">
-                            <a href = "article2.html"><img src="../static/images/article2.png" alt="AquaEmi's second article" style = "width: 100%; height: 90%;"></a>
-                            <a href = "article2.html" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">The Pacific Ocean's seabed could soon be open for deep-sea mining</p></a>
-                            <a href = "article2.html"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">7 hours ago</p></a>
+                            <a href = "{{ url_for('article2_page') }}"><img src="../static/images/article2.png" alt="AquaEmi's second article" style = "width: 100%; height: 90%;"></a>
+                            <a href = "{{ url_for('article2_page') }}" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">The Pacific Ocean's seabed could soon be open for deep-sea mining</p></a>
+                            <a href = "{{ url_for('article2_page') }}"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">7 hours ago</p></a>
                         </div>
                         <div class = "small_article" id = "small_article">
-                            <a href = "article3.html"><img src="../static/images/article3.png" alt="AquaEmi's third article" style = "width: 100%; height: 90%;"></a>
-                            <a href = "article3.html" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
-                            <a href = "article3.html"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">A day ago</p></a>
+                            <a href = "{{ url_for('article3_page') }}"><img src="../static/images/article3.png" alt="AquaEmi's third article" style = "width: 100%; height: 90%;"></a>
+                            <a href = "{{ url_for('article3_page') }}" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
+                            <a href = "{{ url_for('article3_page') }}"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">A day ago</p></a>
                         </div>
                         <div class = "small_article" id = "small_article">
-                            <a href = "article4.html"><img src="../static/images/article4.png" alt="AquaEmi's fourth article" style = "width: 100%; height: 90%;"></a>
-                            <a href = "article4.html" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">Vietnam's groundwater is increasingly polluted</p></a>
-                            <a href = "article4.html"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">Two days ago</p></a>
+                            <a href = "{{ url_for('article4_page') }}"><img src="../static/images/article4.png" alt="AquaEmi's fourth article" style = "width: 100%; height: 90%;"></a>
+                            <a href = "{{ url_for('article4_page') }}" class = "name"><p style = "font-size: 1vw; font-weight: bold; margin: 0.3vw 0.2vw 0 0.3vw">Vietnam's groundwater is increasingly polluted</p></a>
+                            <a href = "{{ url_for('article4_page') }}"><p style = "font-size: 0.6vw; color: #00A66F; margin: 0.3vw 0.2vw 0 0.3vw">Two days ago</p></a>
                         </div>
                     </div>
                 </div>
                 <div class = "other_articles" id = "other_articles">
                     <img src="../static/images/article5.png" alt="AquaEmi's fifth article" style = "width: 30%; height: 20%;">
                     <div class = "review_article" id = "review_article">
-                        <a href = "article5.html" class = "name"><p style = "font-size: 1.5vw; font-weight: bold; margin: 0.3vw 0.2vw 0 1vw">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
-                        <a href = "article5.html"><p style = "font-size: 1vw; margin-left: 1vw; font-style: italic;">"Water is an invaluable resource, essential for all life forms on Earth. However, with the growth of human activities, water pollution has become a pressing global issue. The contamination of water bodies by pollutants poses significant threats to..."</p></a>
-                        <a href = "article5.html"><p style = "font-size: 0.8vw; margin: -0.5vw 0.2vw 0 1vw; color: #00A66F">Sat, July 29, 2023</p></a>
+                        <a href = "{{ url_for('article5_page') }}" class = "name"><p style = "font-size: 1.5vw; font-weight: bold; margin: 0.3vw 0.2vw 0 1vw">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
+                        <a href = "{{ url_for('article5_page') }}"><p style = "font-size: 1vw; margin-left: 1vw; font-style: italic;">"Water is an invaluable resource, essential for all life forms on Earth. However, with the growth of human activities, water pollution has become a pressing global issue. The contamination of water bodies by pollutants poses significant threats to..."</p></a>
+                        <a href = "{{ url_for('article5_page') }}"><p style = "font-size: 0.8vw; margin: -0.5vw 0.2vw 0 1vw; color: #00A66F">Sat, July 29, 2023</p></a>
                     </div>
                 </div>
             </div>
