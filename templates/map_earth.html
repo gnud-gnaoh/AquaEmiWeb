@@ -10,6 +10,42 @@
         <!-- mapbox -->
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+        
+        <!-- For search bar -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function() {
+                $("#overlay_search").hide();
+                $("#search_engine").click(function() { 
+                    $("#overlay_search").toggle();
+                });
+                $("#search_back").click(function() { 
+                    $("#overlay_search").toggle();
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            jQuery(document).ready(function($){
+                $('.search_result').each(function() {
+                    $(this).attr('data_search_term', $(this).attr('data_search_term').toLowerCase());
+                });
+                $('#search_content').on('change keydown paste input', function() {
+                    var searchTerm = $(this).val().toLowerCase();
+                    console.log(searchTerm);
+                    $('.search_result').each(function() {
+                        console.log($(this).filter('[data_search_term *= ' + searchTerm + ']'));
+                        if ($(this).filter('[data_search_term *= ' + searchTerm + ']').length > 0) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
         <section class = "navigation" id = "navigation">
@@ -25,7 +61,7 @@
                             <p><a href = "info" title = "Info" style = "text-decoration: none; color: #00A66F;">Info</a></p>
                         </div>
                         <div class = "tools" id = "tools">
-                            <a href = "index"><img src = "../static/images/search.png" alt="AquaEmi's search icon" style = "width: 2vw"></a>
+                            <img src = "../static/images/search.PNG" alt="AquaEmi's search icon" style = "width: 2vw" id = "search_engine"></a>
                             <a href = "index"><img src = "../static/images/notifications.PNG" alt="AquaEmi's notifications icon" style = "width: 1.75vw"></a>
                             <a href = "index"><img src = "../static/images/profile.PNG" alt="AquaEmi's profile icon" style = "width: 1.7vw;"></a>
                         </div>
@@ -35,6 +71,23 @@
         </section>
 
         <section>
+            <div class = "overlay_search" id = "overlay_search">
+                <div class = "search_bar" id = "search_bar">
+                    <img src = "../static/images/search_back.PNG" style = "width: 1.5vw; height: 0.5w; margin-bottom: -0.15vw;" id = "search_back">
+                    <input type = "text" id = "search_content" name = "search_content" placeholder = "Enter your location..." style = "font-size: 1vw;">
+                    <i class="fa-solid fa-x fa-2xs" style="color: #00a56f;" id = "clear_search" onclick = "document.getElementById('search_content').value = ''"></i>
+                </div>
+                <div class = "search_result_box" id = "search_result_box">
+                    {% for watersource in watersources_data %}
+                        <div class = "search_result" id = "search_result" data_search_term="{{watersource.name}}" style="display: none;" onclick="location.href='{{url_for('detail_page', rivername=watersource.name)}}';">
+                            <img src = "../static/images/location.PNG" style = "width: 1vw; height: 1.3vw;">
+                            <p style = "font-size: 1vw; color: #616161; margin: 0.2vw 0 0 0.7vw; ">{{watersource.name}}</p>
+                            <p style = "font-size: 0.8vw; font-weight: bold; margin: 0.3vw 0 0 0.7vw;">{{watersource.followers}}</p>
+                            <div class = "wqi_search_result" id = "wqi_search_result">{{watersource.quality}}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             <div class = "content" id = "content">
                 <div id = "map" style="width: 100%; height: 45vw"></div>
                 <script type="text/javascript" src="../static/mapbox.js"></script>
