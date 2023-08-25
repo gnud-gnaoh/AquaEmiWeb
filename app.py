@@ -422,7 +422,8 @@ def map_page():
         data.append([watersource.latitude, watersource.longitude, quality])
 
     watersources_data = get_watersources_data()
-    return render_template('map.html', data=json.dumps(data), watersources_data=watersources_data)
+    countries_data = get_countries_data()[:7]
+    return render_template('map.html', data=json.dumps(data), watersources_data=watersources_data, countries_data=countries_data)
 
 @app.route('/map_earth', methods=['GET'])
 def earth_page():
@@ -445,7 +446,8 @@ def earth_page():
     }
 
     watersources_data = get_watersources_data()
-    return render_template('map_earth.html', data=json.dumps(data), watersources_data=watersources_data)
+    countries_data = get_countries_data()[:7]
+    return render_template('map_earth.html', data=json.dumps(data), watersources_data=watersources_data, countries_data=countries_data)
 
 @app.route('/rankings', methods=['GET'])
 def rank_page():  

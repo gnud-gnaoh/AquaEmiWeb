@@ -119,13 +119,37 @@ body {
     text-align: center;
     margin: -32.8vw 0 0 70vw;
 }
+.ranking_board {
+    margin: -0.5vw 0 0 1vw;
+}  
+.ranking_board .ranking_tops {
+    font-size: 1vw;
+    display: flex;
+}
+.ranking_board .ranking_tops .details {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.ranking_board .ranking_tops .details:hover {
+    color: #000031;
+}
+.ranking_board .ranking_tops .wqi_rank {
+    margin: 0.9vw 0 0 0.2vw;
+    background-color: #c3ff76;
+    color: #2b4d00;
+    border-radius: 0.2vw;
+    font-weight: bold;
+    padding: 0 1vw;
+    height: 1.6vw;
+}
 .full_ranking {
     font-family: 'Comic Neue', cursive;
     background-color: #3cffbe;
     border: none;
     text-decoration: none;
     display: inline-block;
-    margin-top: 22vw;
+    margin-top: 1vw;
     padding: 0.8vw 0.5vw;
     width: 80%;
     color: #006644;
