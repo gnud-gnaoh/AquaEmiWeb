@@ -206,9 +206,9 @@ body {
     margin-left: 5.1vw;
     padding: 0 1vw;
     border-radius: 0.3vw;
-    color: #3E821F;
+    /* color: #3E821F; */
     display: flex;
-    background-color: #A8E05F;
+    /* background-color: #A8E05F; */
 }
 .footer {
     display: flex;

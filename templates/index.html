@@ -106,6 +106,81 @@
                     <p style = "font-size: 2vw; font-weight: bolder; margin-top: 1.2vw;">{{ current.display_name }}</p>
                     <p style = "font-size: 1vw; font-weight: light; margin-top: -2.0vw;">{{ current.country }}</p>
                 </div>
+                {% if current.quality <= 100 %}
+                <div class = "quality_box_content" id = "quality_box_content" style="border: 0.15vw solid #6cbe00;">
+                    <div class = "quality_box" id = "quality_box" style="background-color: #A8E05F;">
+                        <div class = "image_quality" id = "image_quality" style="background-color: #6cbe00;">
+                            <img src = "../static/images/good.png" style = "width: 6vw; height: 6vw;">
+                        </div>
+                        <div class = "quality_content" id = "quality_content">
+                            <div class = "quality_wqi" id = "quality_wqi">
+                                <div class = "wqi" id = "wqi" style="color: #3E821F;">
+                                    <p style = "font-size: 2.5vw; margin-top: 2.7vw"> {{ current.quality }}</p>
+                                    <p style = "margin-top: -2.5vw; font-size: 0.9vw; margin-left: -0.8vw">WQI</p>
+                                </div>
+                                <div class = "water_quality" id = "water_quality" style="color: #3E821F;">
+                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">ALARM</p>
+                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for fish and human</p>
+                                </div>
+                            </div>
+                            <div class = "others" id = "others">
+                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "weather" id = "weather">
+                        <div class = "temperature" id = "temperature">
+                            <img src = "../static/images/temperature4.png" style = "width: 2vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.temperature }} </p> 
+                        </div>
+                        <div class = "wind" id = "wind">
+                            <img src = "../static/images/wind3.png" style = "width: 1.8vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.flow }} </p> 
+                        </div>
+                        <div class = "wet" id = "wet">
+                            <img src = "../static/images/wet2.png" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.turbidity }} </p> 
+                        </div>
+                    </div>
+                </div>
+                {% elif current_quality <= 200 %}
+                <div class = "quality_box_content" id = "quality_box_content" style="border: 0.15vw solid #ff6600;">
+                    <div class = "quality_box" id = "quality_box" style="background-color: #fcb07e;">
+                        <div class = "image_quality" id = "image_quality" style="background-color: #F6956C;">
+                            <img src = "../static/images/moderate.png" style = "width: 6vw; height: 6vw;">
+                        </div>
+                        <div class = "quality_content" id = "quality_content">
+                            <div class = "quality_wqi" id = "quality_wqi">
+                                <div class = "wqi" id = "wqi" style="color: #ff6600;">
+                                    <p style = "font-size: 2.5vw; margin-top: 2.7vw"> {{ current.quality }}</p>
+                                    <p style = "margin-top: -2.5vw; font-size: 0.9vw; margin-left: -0.8vw">WQI</p>
+                                </div>
+                                <div class = "water_quality" id = "water_quality" style="color: #ff6600;">
+                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">ALARM</p>
+                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for fish and human</p>
+                                </div>
+                            </div>
+                            <div class = "others" id = "others">
+                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "weather" id = "weather">
+                        <div class = "temperature" id = "temperature">
+                            <img src = "../static/images/temperature5.png" style = "width: 2vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.temperature }} </p> 
+                        </div>
+                        <div class = "wind" id = "wind">
+                            <img src = "../static/images/wind4.png" style = "width: 1.8vw; height: 1.8vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.flow }} </p> 
+                        </div>
+                        <div class = "wet" id = "wet">
+                            <img src = "../static/images/wet4.png" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.turbidity }} </p> 
+                        </div>
+                    </div>
+                </div>
+                {% else %}
                 <div class = "quality_box_content" id = "quality_box_content">
                     <div class = "quality_box" id = "quality_box">
                         <div class = "image_quality" id = "image_quality">
@@ -142,6 +217,8 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
                 <p style = "font-size: 0.8vw;">Last updated 16:28</p> <!-- TODO -->
                 <div class = "data_provided" id = "data_provided">
                     <div class = "logo" id = "logo">
@@ -168,113 +245,31 @@
                 <div class = "forecast" id = "forecast">
                     <p style = "color: #00A66E; font-weight: bold;">Forecast in {{ current.name }}, {{ current.country }}</p>
                     <div class = "forecast_screen" id = "forecast-screen">
+                        {% for prediction in predictions %}
                         <div class = "forecast_box" id = "forecast_box_2days_ago">
-                            <div class = "date" id = "date">Friday</div>
+                            <div class = "date" id = "date">{{prediction[0].date}}</div>
                             <div class = "time_frames" id = "time_frames">
                                 <div class = "time_frame_box" id = "time_frame_box">
                                     <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <div class = "quality_forecast" id = "quality_forecast"> {{prediction[0].quality}}</div>
                                     <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[0].temperature}} °C</p>
                                     <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[0].ph}} pH</p>
                                 </div>
                                 <div class = "time_frame_box" id = "time_frame_box">
                                     <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
+                                    <div class = "quality_forecast" id = "quality_forecast">{{prediction[1].quality}}</div>
                                     <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
+                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[1].temperature}} °C</p>
                                     <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
+                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[1].ph}} pH</p>
                                 </div>
                             </div>
                         </div>
-                        <div class = "forecast_box" id = "forecast_box_2days_ago">
-                            <div class = "date" id = "date">Saturday</div>
-                            <div class = "time_frames" id = "time_frames">
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class = "forecast_box" id = "forecast_box_2days_ago">
-                            <div class = "date" id = "date" style = "color: #00b87a; border-bottom: 0.25vw solid #2CD19B;">Sunday</div>
-                            <div class = "time_frames" id = "time_frames">
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw; ">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class = "forecast_box" id = "forecast_box_2days_ago">
-                            <div class = "date" id = "date">Monday</div>
-                            <div class = "time_frames" id = "time_frames">
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class = "forecast_box" id = "forecast_box_2days_ago">
-                            <div class = "date" id = "date">Tuesday</div>
-                            <div class = "time_frames" id = "time_frames">
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                                <div class = "time_frame_box" id = "time_frame_box">
-                                    <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
-                                    <div class = "quality_forecast" id = "quality_forecast">101 - 150</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
-                                    <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">35</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
-                                    <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">14.8 km/h</p>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
-                    <button class = "week_forecast"><a href="details/{{ current.name }}">7 DAY FORECAST</a></button><br> <!-- DOING -->
+                    <button class = "week_forecast" onclick="location.href='details/{{ current.name | safe }}';">7 DAY FORECAST</button><br>
                     <i class="fa-solid fa-angle-up fa-lg" style = "color: #00A66F; margin: 1.5vw 0 0 47vw;"></i>
                 </div>
                 <div class = "other_places" id = "other_places">

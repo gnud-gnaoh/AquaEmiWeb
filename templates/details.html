@@ -162,15 +162,15 @@
 
                             <div class = "others" id = "others">
                                 <div class = "temperature" id = "temperature">
-                                    <img src = "../static/images/temperature4.png" style = "width: 4vw; height: 4vw;">
+                                    <img src = "../static/images/temperature5.png" style = "width: 4vw; height: 4vw;">
                                     <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }}</p>
                                 </div>
                                 <div class = "wind" id = "wind">
-                                    <img src = "../static/images/wind3.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
+                                    <img src = "../static/images/wind4.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
                                     <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} </p>
                                 </div>
                                 <div class = "wet" id = "wet">
-                                    <img src = "../static/images/wet2.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
+                                    <img src = "../static/images/wet4.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
                                     <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }}</p>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                         <div class = "information_box" id = "information_box" style="border: 0.3vw solid #BD0000;">
                             <div class = "quality_box" id = "quality_box" style="background-color: rgba(256, 132, 132, 0.65);">
                                 <div class = "image_quality_box" id = "image_quality_box" style="background-color: #FD7373;">
-                                    <img src = "../static/images/moderate.png" style = "width: 12vw; height: 11vw;">
+                                    <img src = "../static/images/alarm.png" style = "width: 12vw; height: 11vw;">
                                 </div>
                                 <div class = "wqi" id = "wqi">
                                     <p style = "font-size: 6vw; color: #BD0000; margin: 0.5vw 0 0 0"> {{ data.quality }} </p>
@@ -195,15 +195,15 @@
 
                             <div class = "others" id = "others">
                                 <div class = "temperature" id = "temperature">
-                                    <img src = "../static/images/temperature4.png" style = "width: 4vw; height: 4vw;">
+                                    <img src = "../static/images/temperature.png" style = "width: 4vw; height: 4vw;">
                                     <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }}</p>
                                 </div>
                                 <div class = "wind" id = "wind">
-                                    <img src = "../static/images/wind3.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
+                                    <img src = "../static/images/wind.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
                                     <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} </p>
                                 </div>
                                 <div class = "wet" id = "wet">
-                                    <img src = "../static/images/wet2.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
+                                    <img src = "../static/images/wet3.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
                                     <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }}</p>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@
                     </div>
                     <div class = "others" id = "others">
                         <p style = "font-weight: bold;">[pH, nồng độ oxy tan, chất ô nhiễm]</p>
-                        <p>[pH, nồng độ oxy tan, chất ô nhiễm]</p>
+                        <p>[{{data.ph}}, {{data.DO}} ppm, {{data.turbidity}} NTU]</p>
                     </div>
                 </div>
                 <p style = "font-size: 1.2vw; font-weight: bolder; font-family: 'Noto Sans', sans-serif; margin: 3vw 0 0 2.5vw; color: #00A66E">WQI forecast</p>
@@ -248,42 +248,37 @@
                         <p>Day</p>
                         <p style = "margin-left: 12vw;">Pollution level</p>
                         <p style = "margin-left: 35vw;">Temperature</p>
-                        <p style = "margin-left: 10vw;">Wind</p>
-                        <p style = "margin-left: 10vw;">Humidity</p>
+                        <p style = "margin-left: 10vw;">pH</p>
+                        <p style = "margin-left: 10vw;">Turbidity</p>
                     </div>
+                    {% for prediction in predictions %}
                     <div class = "forecast_box" id = "forecast_box">
-                        <p>Thursday, August 8</p>
-                        <div class = "quality_forecast_box" id = "quality_forecast_box">
+                        <p>{{prediction.date}}</p>
+                        {% if prediction.quality <= 100 %}
+                        <div class = "quality_forecast_box" id = "quality_forecast_box" style="background-color: #A8E05F; color: #3E821F;">
                             <p>Good</p>
-                            <p style = "margin-left: 29vw;"><mark style = "background-color: #A8E05F; font-weight: bold; color: #3E821F;">39</mark> WQI</p>
+                            <p style = "margin-left: 29vw;"><mark style = "background-color: #A8E05F; font-weight: bold; color: #3E821F;">{{prediction.quality}}</mark> WQI</p>
                             <img src = "../static/images/good2.png" style = "width: 2vw; height: 2vw; margin: 0.6vw 0 0 1vw">
                         </div>
-                        <p style = "margin-left: 4.5vw;">24</p>
-                        <p style = "margin-left: 12vw;">21.6 km/h</p>
-                        <p style = "margin-left: 10vw;">84%</p>
-                    </div>
-                    <div class = "forecast_box" id = "forecast_box">
-                        <p>Thursday, August 8</p>
-                        <div class = "quality_forecast_box" id = "quality_forecast_box">
-                            <p>Good</p>
-                            <p style = "margin-left: 29vw;"><mark style = "background-color: #A8E05F; font-weight: bold; color: #3E821F;">43</mark> WQI</p>
-                            <img src = "../static/images/good2.png" style = "width: 2vw; height: 2vw; margin: 0.6vw 0 0 1vw">
+                        {% elif prediction.quality <= 200 %}
+                        <div class = "quality_forecast_box" id = "quality_forecast_box" style="background-color: #F6956C; color: #ff6600;">
+                            <p>Moderate</p>
+                            <p style = "margin-left: 29vw;"><mark style = "background-color: #F6956C; font-weight: bold; color: #ff6600;">{{prediction.quality}}</mark> WQI</p>
+                            <img src = "../static/images/moderate.png" style = "width: 2vw; height: 2vw; margin: 0.6vw 0 0 1vw">
                         </div>
-                        <p style = "margin-left: 4.5vw;">24</p>
-                        <p style = "margin-left: 12vw;">21.6 km/h</p>
-                        <p style = "margin-left: 10vw;">84%</p>
-                    </div>
-                    <div class = "forecast_box" id = "forecast_box">
-                        <p>Thursday, August 8</p>
-                        <div class = "quality_forecast_box" id = "quality_forecast_box">
-                            <p>Good</p>
-                            <p style = "margin-left: 29vw;"><mark style = "background-color: #A8E05F; font-weight: bold; color: #3E821F;">33</mark> WQI</p>
-                            <img src = "../static/images/good2.png" style = "width: 2vw; height: 2vw; margin: 0.6vw 0 0 1vw">
+                        {% else %}
+                        <div class = "quality_forecast_box" id = "quality_forecast_box" style="background-color: #FD7373; color: #BD0000;">
+                            <p>Alarm</p>
+                            <p style = "margin-left: 29vw;"><mark style = "background-color: #FD7373; font-weight: bold; color: #BD0000;">{{prediction.quality}}</mark> WQI</p>
+                            <img src = "../static/images/alarm.png" style = "width: 2vw; height: 2vw; margin: 0.6vw 0 0 1vw">
                         </div>
-                        <p style = "margin-left: 4.5vw;">24</p>
-                        <p style = "margin-left: 12vw;">21.6 km/h</p>
-                        <p style = "margin-left: 10vw;">84%</p>
+                        {% endif %}
+
+                        <p style = "margin-left: 4.5vw;">{{prediction.temperature}}°C</p>
+                        <p style = "margin-left: 12vw;">{{prediction.ph}}</p>
+                        <p style = "margin-left: 10vw;">{{prediction.turbidity}} NTU</p>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>

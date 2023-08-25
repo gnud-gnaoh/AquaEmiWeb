@@ -21,8 +21,7 @@ db.init_app(app)
 app.app_context().push()
 
 # for initializing the database
-# with app.app_context():
-#     db.create_all()
+# db.create_all()
 
 # water_source api
 @app.route('/water_source', methods=['GET'])
@@ -191,16 +190,36 @@ def calculate_WQI(data):
     W = list(map(lambda x:K/x, standard_values))
 
     V = []
-    # V.append(data['ph'])
-    # V.append(data['turbidity'])
-    # V.append(data['conductivity'])
-    # V.append(data['BOD'])
-    # V.append(data['DO'])
     V.append(data.ph)
     V.append(data.turbidity)
     V.append(data.conductivity)
     V.append(data.BOD)
     V.append(data.DO)
+    
+    vs = [0 for _ in range(5)]
+    for i in range(5):
+        if ideal_values[i] != 0:
+            vs[i] = abs(V[i] - ideal_values[i]) / abs(standard_values[i] - ideal_values[i])
+        else:
+            vs[i] = V[i] / standard_values[i]
+
+    Q = list(map(lambda x:100*x, vs))
+    WQ = [W[i] * Q[i] for i in range(5)]
+    WQI = sum(WQ) / sum(W)
+    
+    return WQI
+
+def calculate_WQI_dict(data):
+    standard_values_inverse = map(lambda x:1/x, standard_values)
+    K = 1 / sum(standard_values_inverse)
+    W = list(map(lambda x:K/x, standard_values))
+
+    V = []
+    V.append(data['ph'])
+    V.append(data['turbidity'])
+    V.append(data['conductivity'])
+    V.append(data['BOD'])
+    V.append(data['DO'])
     
     vs = [0 for _ in range(5)]
     for i in range(5):
@@ -310,31 +329,55 @@ def get_watersource_data_by_name(rivername):
             temperature = int(watersource.measurements[-1].temperature)
             turbidity = round(watersource.measurements[-1].turbidity, 2)
             followers = random.randrange(0, 1000) # to be implemented
-            return {'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers, 'temperature': temperature, 'flow': flow, 'turbidity': turbidity}
+            return watersource
     return None
 
-def get_predict_data(data, data_type):
+def get_data_from_watersource(watersource):
+    id = watersource.id
+    country = watersource.country
+    name = watersource.name # TODO: find nearest river?
+    quality = int(calculate_WQI(watersource.measurements[-1]))
+    flow = round(watersource.measurements[-1].flow, 2)
+    temperature = int(watersource.measurements[-1].temperature)
+    turbidity = round(watersource.measurements[-1].turbidity, 2)
+    DO = round(watersource.measurements[-1].DO, 2)
+    ph = round(watersource.measurements[-1].ph, 1)
+    followers = random.randrange(0, 1000) # to be implemented
+    return {'id': id, 'country': country, 'name': name, 'quality': quality, 'followers': followers, 'temperature': temperature, 'flow': flow, 'turbidity': turbidity, 'DO': DO, 'ph': ph}
+
+def get_predict_data(data, data_type, steps):
     data = pd.Series(data, index=pd.date_range(start='1/1/2021',periods=len(data)))
     model = forecast.get_best_model(data_type, data)
-    result = forecast.forecast(model, steps=7)[0].tolist()
+    result = forecast.forecast(model, steps)[0].tolist()
     return result
 
-def predict_measurements(watersource):
-    data_len = min(5, len(watersource.measurements))
+def predict_measurements(watersource, steps):
+    data_len = min(10, len(watersource.measurements))
     temp_data = [i.temperature for i in watersource.measurements[-data_len:]]
     do_data = [i.DO for i in watersource.measurements[-data_len:]]
     ec_data = [i.conductivity for i in watersource.measurements[-data_len:]]
     ph_data = [i.ph for i in watersource.measurements[-data_len:]]
-    pre_temp_data = get_predict_data(temp_data, "TEMP")
-    pre_do_data = get_predict_data(do_data, "DO")
-    pre_ec_data = get_predict_data(ec_data, "EC")
-    pre_ph_data = get_predict_data(ph_data, "PH")
-    final_data = [{"TEMP": int(pre_temp_data[i]),
-                   "DO": round(pre_do_data[i], 2),
-                   "EC": round(pre_ec_data[i], 2),
-                   "PH": round(pre_ph_data[i], 1)} for i in range(7)]
+    tss_data = [i.turbidity for i in watersource.measurements[-data_len:]]
+    bod_data = [i.BOD for i in watersource.measurements[-data_len:]]
+    pre_temp_data = get_predict_data(temp_data, "TEMP", steps)
+    pre_do_data = get_predict_data(do_data, "DO", steps)
+    pre_ec_data = get_predict_data(ec_data, "EC", steps)
+    pre_ph_data = get_predict_data(ph_data, "PH", steps)
+    pre_tss_data = get_predict_data(tss_data, "TSS", steps)
+    pre_bod_data = get_predict_data(bod_data, "DO", steps)
+
+    final_data = [{"temperature": int(pre_temp_data[i]),
+                    "DO": round(pre_do_data[i], 2),
+                    "conductivity": round(pre_ec_data[i], 2),
+                    "ph": round(pre_ph_data[i], 1),
+                    "turbidity": round(pre_tss_data[i], 2),
+                    "BOD": round(pre_bod_data[i], 2),
+                    "quality": int(calculate_WQI_dict({"temperature": pre_temp_data[i], "DO": pre_do_data[i], "conductivity": pre_ec_data[i], "ph": pre_ph_data[i], "turbidity": pre_tss_data[i], "BOD": pre_bod_data[i]}))} 
+                    for i in range(steps)]
     return final_data
 
+DAYS_OF_A_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                    
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def home_page():
@@ -360,7 +403,15 @@ def home_page():
         'turbidity': round(closest_watersource.measurements[-1].turbidity,2)
     }
 
-    return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current, watersources_data=watersources_data, predicts=predict_measurements(closest_watersource))
+    print(current)
+    print(closest_watersource.measurements)
+    
+    predictions = predict_measurements(closest_watersource, 10)
+    for i in range(0, len(predictions), 2):
+        predictions[i].update({'date': DAYS_OF_A_WEEK[i // 2]})
+        predictions[i + 1].update({'date': DAYS_OF_A_WEEK[i // 2]})
+    predictions_two = [(predictions[i], predictions[i + 1]) for i in range(0, len(predictions), 2)]
+    return render_template('index.html', data=json.dumps(data), countries_data=countries_data, current=current, watersources_data=watersources_data, predictions=predictions_two)
 
 @app.route('/map', methods=['GET'])
 def map_page():
@@ -414,9 +465,14 @@ def travel_page():
 
 @app.route('/details/<rivername>', methods=['GET'])
 def detail_page(rivername):
-    data = get_watersource_data_by_name(rivername)
+    watersource = get_watersource_data_by_name(rivername)
+    data = get_data_from_watersource(watersource)
     watersources_data = get_watersources_data()
-    return render_template('details.html', rivername=rivername, data=data, watersources_data=watersources_data)
+    predictions = predict_measurements(watersource, 7)
+    for i in range(0, len(predictions)):
+        predictions[i].update({'date': DAYS_OF_A_WEEK[i]})
+    print(predictions)
+    return render_template('details.html', rivername=rivername, data=data, watersources_data=watersources_data, predictions=predictions)
 
 @app.route('/info', methods=['GET'])
 def info_page():
