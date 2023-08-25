@@ -90,5 +90,4 @@ def get_best_model(key, data):
 
 def forecast(model, steps=36):
     '''Returns (Forecast, Lower bound forecast, Upper bound forecast)'''
-    return ((r:=model.get_forecast(steps=steps)).predicted_mean,  r.iloc[:, 0], r.iloc[:, 1])
-
+    return ((r:=model.get_forecast(steps=steps)).predicted_mean,  r.conf_int().iloc[:, 0], r.conf_int().iloc[:, 1])
