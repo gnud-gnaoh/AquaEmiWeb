@@ -5,6 +5,7 @@ import requests
 import country_converter
 import pandas as pd
 import forecast
+import paho.mqtt.client as mqtt
 from flask import Flask, request, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemySchema
@@ -507,6 +508,33 @@ def article4_page():
 def article5_page():
     watersources_data = get_watersources_data()
     return render_template('article5.html', watersources_data=watersources_data)
+
+def on_connect(client, userdata, flags, rc):
+    import paho.mqtt.client as mqtt
+
+def on_connect(client, userdata, flags, rc):
+    print('CONNACK received with code %d.' % (rc))
+
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("Subscribed: "+str(mid)+" "+str(granted_qos))
+
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
+    data = json.loads(msg.payload)
+    response = requests.post('http://127.0.0.1:5000/measure', json=data)
+    print(response.text)
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_subscribe = on_subscribe
+client.on_message = on_message
+
+client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
+client.username_pw_set('aquaemi', 'aquaemipass')
+client.connect('d8b54cc855d544539015413af5d6f9a1.s2.eu.hivemq.cloud', 8883)
+client.subscribe('aquaemiIOT/#', qos=1) # subcribe to all channels: pH, wqi, stream flow, TDS
+
+client.loop_start()
 
 if __name__ == '__main__':
     app.run()
