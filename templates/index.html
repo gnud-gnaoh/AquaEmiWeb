@@ -11,7 +11,11 @@
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
+        
+        <link rel="stylesheet" href="../static/dist/MarkerCluster.css">
+        <link rel="stylesheet" href="../static/dist/MarkerCluster.Default.css">
+        <script src="../static/dist/leaflet.markercluster-src.js"></script>
+        
         <!-- Leaflet heatmap plugin: https://github.com/Leaflet/Leaflet.heat -->
         <script src="../static/leaflet-heat.js"></script>
 
@@ -54,7 +58,7 @@
         <section class = "navigation" id = "navigation">
             <nav>
                 <div class = "navigation_bar" id = "navigation_bar">
-                    <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 12.5vw; height: 4.5vw;">
+                    <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 12.5vw; height: 4.5vw;" onclick="location.href='{{url_for('home_page')}}';">
                     <div class = "navigation_keys" id = "navigation_keys">
                         <div class = "subjects" id = "subjects">
                             <p><a href = "index" title = "My water" style = "text-decoration: none; color: #00A66F;">My water</a></p>
@@ -99,7 +103,49 @@
                     
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 
-                var heat = L.heatLayer({{data | safe}}, {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+                var data = {{ data | safe }};
+
+                // var heat = L.heatLayer(data, {radius: 25, minOpacity: 0.4, gradient: {0.4: 'blue', 0.65: 'lime', 1: 'red'}}).addTo(map);
+
+                var markers = L.markerClusterGroup({
+                    iconCreateFunction: function (cluster) {
+                        var markers = cluster.getAllChildMarkers();
+                        var n = 0;
+                        for (var i = 0; i < markers.length; i++) {
+                            console.log(markers[i])
+                            n += markers[i].number;
+                        }
+                        n /= Math.max(1, markers.length);
+                        n = Math.floor(n);
+                        if (n <= 100) {
+                            return L.divIcon({ html: '<div><span>' + n + '</span></div>', className: 'marker-cluster marker-cluster-small', /*iconSize: L.point(40, 40)*/ });
+                        } else if (n <= 200) {
+                            return L.divIcon({ html: '<div><span>' + n + '</span></div>', className: 'marker-cluster marker-cluster-medium', /*iconSize: L.point(40, 40)*/ });
+                        } else {
+                            return L.divIcon({ html: '<div><span>' + n + '</span></div>', className: 'marker-cluster marker-cluster-large', /*iconSize: L.point(40, 40)*/ });
+                        }
+                    },
+                    spiderfyOnMaxZoom: false, 
+                    showCoverageOnHover: false, 
+                    zoomToBoundsOnClick: false,
+                });
+
+                for (var i = 0; i < data.length; i++) {
+                    var a = data[i];
+                    var title = a[2];
+                    var marker = L.marker(new L.LatLng(a[0], a[1]), {title: title});
+                    marker.number = a[2];
+                    marker.bindPopup(title);
+                    markers.addLayer(marker);
+
+                    // add two nearby marker so it doesn't actually show the marker
+                    var title1 = a[2];
+                    var marker1 = L.marker(new L.LatLng(a[0], a[1]), {title: title1});
+                    marker1.number = a[2];
+                    markers.addLayer(marker1);
+                }
+
+                map.addLayer(markers);
             </script>
             <div class = "quality" id = "quality" onclick="location.href='details/{{ current.name | safe }}';">
                 <div class = "location" id = "location">
@@ -119,27 +165,27 @@
                                     <p style = "margin-top: -2.5vw; font-size: 0.9vw; margin-left: -0.8vw">WQI</p>
                                 </div>
                                 <div class = "water_quality" id = "water_quality" style="color: #3E821F;">
-                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">ALARM</p>
-                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for fish and human</p>
+                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">GOOD</p>
+                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Healthy for fish and people</p>
                                 </div>
                             </div>
                             <div class = "others" id = "others">
-                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                                <p style = "font-size: 0.9vw;">pH: {{current.ph}}, nồng độ oxi tan: {{current.DO}} ppm </p>
                             </div>
                         </div>
                     </div>
                     <div class = "weather" id = "weather">
                         <div class = "temperature" id = "temperature">
                             <img src = "../static/images/temperature4.png" style = "width: 2vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.temperature }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.temperature }} °C </p> 
                         </div>
                         <div class = "wind" id = "wind">
                             <img src = "../static/images/wind3.png" style = "width: 1.8vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.flow }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.flow }} m3/s </p> 
                         </div>
                         <div class = "wet" id = "wet">
                             <img src = "../static/images/wet2.png" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.turbidity }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #94D53F"> {{ current.turbidity }} NTU </p> 
                         </div>
                     </div>
                 </div>
@@ -156,27 +202,27 @@
                                     <p style = "margin-top: -2.5vw; font-size: 0.9vw; margin-left: -0.8vw">WQI</p>
                                 </div>
                                 <div class = "water_quality" id = "water_quality" style="color: #ff6600;">
-                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">ALARM</p>
-                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for fish and human</p>
+                                    <p style = "font-size: 1.5vw; font-weight: bold; margin-top: 1vw">MODERATE</p>
+                                    <p style = "font-size: 0.85vw; margin-top: -1.3vw">Unhealthy for sensitive groups of fish and people</p>
                                 </div>
                             </div>
                             <div class = "others" id = "others">
-                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                                <p style = "font-size: 0.9vw;">pH: {{current.ph}}, nồng độ oxi tan: {{current.DO}} ppm </p>
                             </div>
                         </div>
                     </div>
                     <div class = "weather" id = "weather">
                         <div class = "temperature" id = "temperature">
                             <img src = "../static/images/temperature5.png" style = "width: 2vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.temperature }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.temperature }} °C </p> 
                         </div>
                         <div class = "wind" id = "wind">
                             <img src = "../static/images/wind4.png" style = "width: 1.8vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.flow }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.flow }} m3/s </p> 
                         </div>
                         <div class = "wet" id = "wet">
                             <img src = "../static/images/wet4.png" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.turbidity }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #ff9249"> {{ current.turbidity }} NTU </p> 
                         </div>
                     </div>
                 </div>
@@ -198,28 +244,28 @@
                                 </div>
                             </div>
                             <div class = "others" id = "others">
-                                <p style = "font-size: 0.9vw;">pH, nồng độ oxi tan, chất gây ô nhiễm</p>
+                                <p style = "font-size: 0.9vw;">pH: {{current.ph}}, nồng độ oxi tan: {{current.DO}} ppm </p>
                             </div>
                         </div>
                     </div>
                     <div class = "weather" id = "weather">
                         <div class = "temperature" id = "temperature">
                             <img src = "../static/images/temperature.png" style = "width: 2vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.temperature }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.temperature }} °C </p> 
                         </div>
                         <div class = "wind" id = "wind">
                             <img src = "../static/images/wind.png" style = "width: 1.8vw; height: 1.8vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.flow }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.flow }} m3/s </p> 
                         </div>
                         <div class = "wet" id = "wet">
                             <img src = "../static/images/wet.png" style = "margin-top: 0.12vw; width: 1.15vw; height: 1.4vw">
-                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.turbidity }} </p> 
+                            <p style = "margin: 0.25vw 0.5vw; font-size: 1vw; font-weight: bold; color: #F63E3E"> {{ current.turbidity }} NTU </p> 
                         </div>
                     </div>
                 </div>
                 {% endif %}
 
-                <p style = "font-size: 0.8vw;">Last updated 16:28</p> <!-- TODO -->
+                <p style = "font-size: 0.8vw;">Last updated 16:28</p>
                 <div class = "data_provided" id = "data_provided">
                     <div class = "logo" id = "logo">
                         <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 6vw; height: 2vw;">
@@ -252,17 +298,17 @@
                                 <div class = "time_frame_box" id = "time_frame_box">
                                     <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">16:00</p>
                                     <div class = "quality_forecast" id = "quality_forecast"> {{prediction[0].quality}}</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <img src = "../static/images/temperaturenew.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
                                     <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[0].temperature}} °C</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
+                                    <img src = "../static/images/drop.png" style = "width: 3vw; height: 3vw;">
                                     <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[0].ph}} pH</p>
                                 </div>
                                 <div class = "time_frame_box" id = "time_frame_box">
                                     <p style = "font-weight: bold; color:#d60000; font-size: 1.25vw;">18:00</p>
                                     <div class = "quality_forecast" id = "quality_forecast">{{prediction[1].quality}}</div>
-                                    <img src = "../static/images/temperature2.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
+                                    <img src = "../static/images/temperaturenew.png" style = "width: 3.5vw; height: 3vw; margin-top: 1vw;">
                                     <p style = "font-weight: bold; font-size: 1.2vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[1].temperature}} °C</p>
-                                    <img src = "../static/images/wind2.png" style = "width: 3vw; height: 3vw;">
+                                    <img src = "../static/images/drop.png" style = "width: 3vw; height: 3vw;">
                                     <p style = "font-weight: bold; font-size: 1vw; margin: 0.8vw 0 0.8vw 0; color: rgb(155, 155, 155)">{{prediction[1].ph}} pH</p>
                                 </div>
                             </div>
@@ -272,10 +318,10 @@
                     <button class = "week_forecast" onclick="location.href='details/{{ current.name | safe }}';">7 DAY FORECAST</button><br>
                     <i class="fa-solid fa-angle-up fa-lg" style = "color: #00A66F; margin: 1.5vw 0 0 47vw;"></i>
                 </div>
-                <div class = "other_places" id = "other_places">
+                <!-- <div class = "other_places" id = "other_places">
                     <div class = "settings">
-                        <div class = "add_place_manage" id = "add_place" style = "margin-left: 31.5vw;">Add Place</div> <!-- TODO -->
-                        <div class = "add_place_manage" id = "manage">Manage</div> <!-- TODO -->
+                        <div class = "add_place_manage" id = "add_place" style = "margin-left: 31.5vw;">Add Place</div>
+                        <div class = "add_place_manage" id = "manage">Manage</div>
                     </div>
                     <div class = "other_places_" id = "other_places_">
                         <div class = "other_places_box" id = "other_places_box" style = "margin-right: 4vw;" onclick="location.href='details/{{ current.name | safe }}';">
@@ -296,7 +342,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Sat.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -304,7 +350,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Sun.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -312,7 +358,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Mon.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -341,7 +387,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Sat.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -349,7 +395,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Sun.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -357,7 +403,7 @@
                                         <p style = "font-weight: bold; font-size: 1.2vw;">Mon.</p>
                                         <div class = "other_places_forecast_quality" id = "other_places_forecast_quality">51 - 100</div>
                                         <div class = "other_places_forecast_wind" id = "other_places_forecast_wind">
-                                            <img src = "../static/images/wind2.png" style = "width: 2vw; height: 2vw;">
+                                            <img src = "../static/images/drop.png" style = "width: 2vw; height: 2vw;">
                                             <p style = "color: #979797; font-size: 1.2vw;">14.8 km/h</p>
                                         </div>
                                     </div>
@@ -369,7 +415,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <p style = "color: #00A66E; font-weight: bold; margin-top: 5vw">News and ranking</p>
                 <div class = "news_and_ranking" id = "news_and_ranking">
                     <div class = "ranking" id = "ranking">
@@ -392,35 +438,35 @@
                             {% endfor %}
                         </div>
                         <p style = "font-size: 0.7vw; color: #505050; margin-left: 12vw; margin-top: 2vw;">9:00, August 4</p>
-                        <button class = "full_ranking" id = "full_ranking"><a href="rankings">SEE FULL RANKING</a></button>
+                        <button class = "full_ranking" id = "full_ranking" onclick="location.href='{{url_for('rank_page')}}';">SEE FULL RANKING</button>
                     </div>
                     <div class = "news" id = "news">
                         <div class = "headline" id = "headline">
-                            <a href = "article1.html"><img src = "../static/images/article1.png" style = "width: 38vw; height: 27vw;"></a>
-                            <a href = "article1.html"><p style = "font-size: 1.5vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">US agency takes unprecedented action to tackle PFAS water pollution</p></a>
-                            <a href = "article1.html"><p style = "font-size: 1vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
-                            <a href = "article1.html"><p style = "font-size: 1vw; color: #00A66F; margin-left: 0.5vw">2 hours ago</p></a>
+                            <a href = "{{url_for('article1_page')}}"><img src = "../static/images/article1.png" style = "width: 38vw; height: 27vw;"></a>
+                            <a href = "{{url_for('article1_page')}}"><p style = "font-size: 1.5vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">US agency takes unprecedented action to tackle PFAS water pollution</p></a>
+                            <a href = "{{url_for('article1_page')}}"><p style = "font-size: 1vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
+                            <a href = "{{url_for('article1_page')}}"><p style = "font-size: 1vw; color: #00A66F; margin-left: 0.5vw">2 hours ago</p></a>
                         </div>
                         <div class = "news_others" id = "news_others">
                             <div class = "news_other_articles" id = "news_other_articles">
-                                <a href = "article2.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">The Pacific Ocean's seabed could soon be open for deep-sea mining</p></a>
-                                <a href = "article2.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The world's ocean are polluted by a “plastic smog” made up of an estimated 171 trillion plastic particles that if..."</p></a>
-                                <a href = "article2.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">7 hours ago</p></a>
+                                <a href = "{{url_for('article2_page')}}"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">The Pacific Ocean's seabed could soon be open for deep-sea mining</p></a>
+                                <a href = "{{url_for('article2_page')}}"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The world's ocean are polluted by a “plastic smog” made up of an estimated 171 trillion plastic particles that if..."</p></a>
+                                <a href = "{{url_for('article2_page')}}"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">7 hours ago</p></a>
                             </div>
                             <div class = "news_other_articles" id = "news_other_articles">
-                                <a href = "article3.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
-                                <a href = "article3.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
-                                <a href = "article3.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">A day ago</p></a>
+                                <a href = "{{url_for('article3_page')}}"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">More than 170 trillion plastic particles found in the ocean as pollution reaches ‘unprecedented’ levels</p></a>
+                                <a href = "{{url_for('article3_page')}}"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"The US Environmental Protection Agency is taking unprecedented enforcement action over PFAS water pollution by ordering..."</p></a>
+                                <a href = "{{url_for('article3_page')}}"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">A day ago</p></a>
                             </div>
                             <div class = "news_other_articles" id = "news_other_articles">
-                                <a href = "article4.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Vietnam's groundwater is increasingly polluted</p></a>
-                                <a href = "article4.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Professor Harry explained through examples such as producing 1 sheet of A4 paper requires 10 liters..."</p></a>
-                                <a href = "article4.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Two days ago</p></a>
+                                <a href = "{{url_for('article4_page')}}"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Vietnam's groundwater is increasingly polluted</p></a>
+                                <a href = "{{url_for('article4_page')}}"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Professor Harry explained through examples such as producing 1 sheet of A4 paper requires 10 liters..."</p></a>
+                                <a href = "{{url_for('article4_page')}}"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Two days ago</p></a>
                             </div>
                             <div class = "news_other_articles" id = "news_other_articles">
-                                <a href = "article5.html"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Current State of Water Pollution Worldwide: WQI Data and Remedial Measures</p></a>
-                                <a href = "article5.html"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Water is an invaluable resource, essential for all life forms on Earth. However, with the growth of ..."</p></a>
-                                <a href = "article5.html"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Sat, July 29, 2023</p></a>
+                                <a href = "{{url_for('article5_page')}}"><p style = "font-size: 1vw; font-weight: bold; margin-left: 0.5vw; margin-top: 1vw; color: #000;">Current State of Water Pollution Worldwide: WQI Data and Remedial Measures</p></a>
+                                <a href = "{{url_for('article5_page')}}"><p style = "font-size: 0.8vw; margin-top: -1vw; margin-left: 0.5vw; font-style: italic; color: #000">"Water is an invaluable resource, essential for all life forms on Earth. However, with the growth of ..."</p></a>
+                                <a href = "{{url_for('article5_page')}}"><p style = "font-size: 0.5vw; color: #00A66F; margin-left: 0.5vw">Sat, July 29, 2023</p></a>
                             </div>
                         </div>
                     </div>
@@ -429,18 +475,18 @@
         </section>
         <footer>
             <div class = "footer" id = "footer">
-                <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 19vw; height: 6.5vw; margin-top: 1.3vw">
+                <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 19vw; height: 6.5vw; margin-top: 1.3vw" onclick="location.href='{{url_for('home_page')}}';">
                 <div class = "subjects_footer" id = "subjects_footer">
                     <div class = "first" id = "first">
-                        <p>Intro</p>
-                        <p>My water</p>
+                        <a href = "{{url_for('info_page')}}" style="text-decoration: none;"><p>Info</p></a>
+                        <a href = "{{url_for('home_page')}}" style="text-decoration: none;"><p>My water</p></a>
                     </div>
                     <div class = "second" id = "second">
-                        <p>Map</p>
-                        <p>Travel</p>
+                        <a href = "{{url_for('map_page')}}" style="text-decoration: none;"><p>Map</p></a>
+                        <a href = "{{url_for('travel_page')}}" style="text-decoration: none;"><p>Travel</p></a>
                     </div>
                     <div class = "third" id = "third">
-                        <p>News and Rankings</p>
+                        <a href = "{{url_for('rank_page')}}" style="text-decoration: none;"><p>News and Rankings</p></a>
                         <p>Profile and notifications</p>
                     </div>
                 </div>

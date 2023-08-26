@@ -152,7 +152,7 @@ body {
 }
 .information .others .temperature {
     display: flex;
-    margin-left: 4vw;
+    margin-left: 2vw;
 }
 .information .others .wind {
     display: flex;
