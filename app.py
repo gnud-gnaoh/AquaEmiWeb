@@ -400,7 +400,9 @@ def home_page():
         'temperature': int(closest_watersource.measurements[-1].temperature), 
         'quality': int(calculate_WQI(closest_watersource.measurements[-1])), 
         'flow': round(closest_watersource.measurements[-1].flow, 2),
-        'turbidity': round(closest_watersource.measurements[-1].turbidity,2)
+        'turbidity': round(closest_watersource.measurements[-1].turbidity,2),
+        'DO': round(closest_watersource.measurements[-1].DO,2),
+        'ph': round(closest_watersource.measurements[-1].ph,1),
     }
 
     print(current)
