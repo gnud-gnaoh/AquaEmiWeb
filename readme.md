@@ -1,9 +1,14 @@
 # AquaEmi
 
-**AquaEmi** is a product aim to identify, control and evaluate environmental effects of water pollution.
+**AquaEmi** is a web IOT product aim to identify, control and evaluate environmental effects of water pollution.
 
-Uses [Flask](https://flask.palletsprojects.com/en/2.3.x/) for back-end, [MySQL](https://www.mysql.com/) for database.
+The project uses [Flask](https://flask.palletsprojects.com/en/2.3.x/) for back-end, [MySQL](https://www.mysql.com/) for database.
 
+[Leaflet](https://leafletjs.com/) and [Mapbox](https://www.mapbox.com/) API for interactive maps. 
+
+The project also integrates [AI technology](https://github.com/AIMasterRace/Aquaemi-ARIMA) to predict water quality, [IOT](https://github.com/AIMasterRace/AquaEmi_IoT) to measure water data and [MQTT Paho](https://pypi.org/project/paho-mqtt/) to connect with the hardware.
+
+Some more details and statistics about the [hardware and the forecasting](https://docs.google.com/document/d/1TaorF_7x6znF8inQv3C-6PSgdkxXTADECVwlWkkH1LI/edit#heading=h.mggxvvj6fy1c).
 ## Installation & usage
 
 - (Optional) Create a virtual environment
