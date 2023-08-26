@@ -46,7 +46,7 @@
         <section class = "navigation" id = "navigation">
             <nav>
                 <div class = "navigation_bar" id = "navigation_bar">
-                    <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 12.5vw; height: 4.5vw;">
+                    <img src="../static/images/logo.png" alt="AquaEmi's logo" style = "width: 12.5vw; height: 4.5vw;" onclick="location.href='{{url_for('home_page')}}';">
                     <div class = "navigation_keys" id = "navigation_keys">
                         <div class = "subjects" id = "subjects">
                             <p><a href = "{{ url_for('home_page') }}" title = "My water" style = "text-decoration: none; color: #00A66F;">My water</a></p>
@@ -107,7 +107,7 @@
                     <div class = "map" id = "map">
                         <img src = "../static/images/map2.png" style = "width: 25vw; height: 30vw; border-radius: 1vw;">
                         <p style = "font-size: 1.3vw; color: #fff; margin: -6vw 0 0 1vw; font-weight: bold;">{{ rivername }} Water Pollution Map</p>
-                        <button class = "view_map" id = "view_map"><a href="map">VIEW MAP</a></button>
+                        <button class = "view_map" id = "view_map" onclick="location.href='map';">VIEW MAP</button>
                     </div>
                     <div class = "information" id = "information">
                         {% if data.quality <= 100 %}
@@ -124,21 +124,22 @@
                                     <p style = "font-size: 4.5vw; color: #3E821F; margin: 1vw 0 0 3vw; font-weight: bold;">GOOD</p>
                                     <p style = "font-size: 1.5vw; color: #3E821F; margin: 0 0 1vw 0;">Healthy for fish and people</p>
                                     <div class = "quality_information_others" id = "quality_information_others">pH, nồng độ oxy tan, chất ô nhiễm</div>
+                                    <div class = "quality_information_others" id = "quality_information_others">7, 6, 5</div>
                                 </div>
                             </div>
 
                             <div class = "others" id = "others">
                                 <div class = "temperature" id = "temperature">
                                     <img src = "../static/images/temperature4.png" style = "width: 4vw; height: 4vw;">
-                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }}</p>
+                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }} °C </p>
                                 </div>
                                 <div class = "wind" id = "wind">
                                     <img src = "../static/images/wind3.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} </p>
+                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} m3/s </p>
                                 </div>
                                 <div class = "wet" id = "wet">
                                     <img src = "../static/images/wet2.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }}</p>
+                                    <p style = "font-size: 1.5vw; color: #94D53F; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }} NTU</p>
                                 </div>
                             </div>
                         </div>
@@ -163,15 +164,15 @@
                             <div class = "others" id = "others">
                                 <div class = "temperature" id = "temperature">
                                     <img src = "../static/images/temperature5.png" style = "width: 4vw; height: 4vw;">
-                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }}</p>
+                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }} °C</p>
                                 </div>
                                 <div class = "wind" id = "wind">
                                     <img src = "../static/images/wind4.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} </p>
+                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} m3/s </p>
                                 </div>
                                 <div class = "wet" id = "wet">
                                     <img src = "../static/images/wet4.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }}</p>
+                                    <p style = "font-size: 1.5vw; color: #ff9249; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }} NTU</p>
                                 </div>
                             </div>
                         </div>
@@ -196,15 +197,15 @@
                             <div class = "others" id = "others">
                                 <div class = "temperature" id = "temperature">
                                     <img src = "../static/images/temperature.png" style = "width: 4vw; height: 4vw;">
-                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }}</p>
+                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.2vw">{{ data.temperature }} °C</p>
                                 </div>
                                 <div class = "wind" id = "wind">
                                     <img src = "../static/images/wind.png" style = "width: 3vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} </p>
+                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.7vw;">{{ data.flow }} m3/s </p>
                                 </div>
                                 <div class = "wet" id = "wet">
                                     <img src = "../static/images/wet3.png" style = "width: 2vw; height: 3vw; margin: 0.5vw 0 0 0;">
-                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }}</p>
+                                    <p style = "font-size: 1.5vw; color: #F63E3E; margin: 1.1vw 0 0 0.5vw;">{{ data.turbidity }} NTU</p>
                                 </div>
                             </div>
                         </div>
